@@ -1,0 +1,11 @@
+# __pycache__/
+*.pyc
+
+#png
+*.png
+
+# static/generated/
+static/generated/
+
+# svg   
+*.svg
