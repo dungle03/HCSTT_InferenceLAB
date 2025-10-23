@@ -1,3 +1,4 @@
 Flask==3.1.2
 networkx==3.5
 graphviz==0.21
+pytest==8.2.0
