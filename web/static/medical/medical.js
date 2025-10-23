@@ -593,24 +593,45 @@ document.addEventListener('keydown', function (event) {
     // Only on wizard page
     if (!document.querySelector('.wizard-step')) return;
 
-    // Don't trigger shortcuts when typing in textarea or input
-    if (event.target.matches('textarea, input[type="text"], input[type="number"]')) {
-        return;
-    }
-
-    if (event.key === 'ArrowRight' || event.key === 'Enter') {
-        const activeStep = document.querySelector('.wizard-step.active');
-        const submitBtn = activeStep.querySelector('button[type="submit"]');
-
-        if (!submitBtn) {
+    // Handle Enter key specially
+    if (event.key === 'Enter') {
+        // If in an input field, select, or textarea
+        if (event.target.matches('input, textarea, select')) {
             event.preventDefault();
-            nextStep();
+
+            // Get current step
+            const activeStep = document.querySelector('.wizard-step.active');
+            if (!activeStep) return;
+
+            const stepNumber = parseInt(activeStep.dataset.step);
+
+            // If NOT at last step, move to next step
+            if (stepNumber < totalSteps) {
+                nextStep();
+            } else {
+                // At last step, submit the form
+                const form = document.getElementById('symptomForm');
+                if (form) {
+                    form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                }
+            }
+            return;
         }
     }
 
-    if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        prevStep();
+    // Arrow key shortcuts (only when NOT in input fields)
+    if (!event.target.matches('textarea, input, select')) {
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            if (currentStep < totalSteps) {
+                nextStep();
+            }
+        }
+
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            prevStep();
+        }
     }
 });
 
