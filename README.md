@@ -109,6 +109,9 @@ intelligent-diagnosis-system/
 │           ├── medical.js         # Medical wizard logic
 │           └── images/            # Medical assets
 │
+├── 📂 tests/                      # ✅ Automated test suite (pytest)
+│   └── test_medical_diagnosis.py  # Integration tests for medical API
+│
 ├── run.py                         # 🚀 Main entry point
 ├── requirements.txt               # Python dependencies
 └── README.md                      # Documentation (this file)
@@ -122,6 +125,7 @@ intelligent-diagnosis-system/
 | **medical_kb** | Knowledge base y tế | `loader.py`, `medical_kb.json` |
 | **web** | Flask application | `routes/`, `templates/`, `static/` |
 | **web.diagnosis_scorer** | AI scoring system | `diagnosis_scorer.py` |
+| **tests** | Pytest integration suite | `tests/test_medical_diagnosis.py` |
 
 ## 🚀 Hướng dẫn Cài đặt
 
@@ -170,6 +174,7 @@ pip install -r requirements.txt
 Flask==3.1.2      # Web framework
 networkx==3.5     # Graph algorithms
 graphviz==0.21    # Graph visualization
+pytest==8.2.0     # Test runner (development)
 ```
 
 ### Bước 4: Cài đặt Graphviz (System)
@@ -258,6 +263,20 @@ python run.py
 
 ## 🧪 Testing
 
+### Automated Tests
+
+```bash
+# Chạy toàn bộ bộ test tích hợp Medical Diagnosis
+pytest tests/test_medical_diagnosis.py
+```
+
+Các bài test này gửi payload giả lập tới `/medical/api/diagnose` để đảm bảo kết quả trả về ổn định:
+
+- **test_severe_upper_respiratory_symptoms_surface_pharyngitis**: xác nhận triệu chứng hô hấp nặng ưu tiên chẩn đoán `viem_hong` với độ tin cậy đủ cao.
+- **test_digestive_symptoms_rank_food_poisoning_or_gastritis_highest**: đảm bảo triệu chứng đường tiêu hoá ưu tiên `ngo_doc_thuc_pham`/`viem_da_day`.
+
+> 💡 *Pytest cần được cài (đã khai báo trong `requirements.txt`). Nếu muốn chạy tất cả test sau này, hãy mở rộng thư mục `tests/` và dùng `pytest tests/`.*
+
 ### Manual Testing Checklist
 
 #### Inference Lab
@@ -284,13 +303,6 @@ python run.py
 - [ ] Treatment recommendations
 - [ ] Edge case: No symptoms → Error message
 - [ ] Edge case: Ambiguous symptoms → Multiple diagnoses
-
-### Unit Testing (Future)
-
-```bash
-# TODO: Add pytest test suite
-pytest tests/
-```
 
 ---
 
