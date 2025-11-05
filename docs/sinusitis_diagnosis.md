@@ -217,3 +217,24 @@ Phản hồi khi ĐÃ đủ kết luận:
 ```
 
 Ghi chú: đồ thị suy diễn (FPG/RPG) bị tắt để tối ưu tốc độ và giảm phụ thuộc.
+
+---
+
+## 9) Sơ đồ luồng (Mermaid)
+
+```mermaid
+flowchart TD
+  U[User] --> UI[Interview]
+  UI --> API[NextQuestion API]
+  API --> FX[Normalize Facts]
+  FX --> INF[Forward Chaining]
+  INF --> DEC{Diagnosis?}
+  DEC -- No --> Q[Choose Next Question]
+  Q --> UI
+  DEC -- Yes --> SAVE[Save result.json]
+  SAVE --> RES[Results Page]
+```
+
+Ghi chú:
+- Ưu tiên chẩn đoán: nguy_co_bien_chung → viem_xoang_do_nam → viem_xoang_cap_do_vi_khuan → viem_xoang_man_tinh → viem_xoang_cap_do_virus → viem_xoang_cap.
+- `early‑stop` chỉ kết thúc khi đã có một chẩn đoán thật; nếu mới có `viem_xoang_cap` mà thiếu dữ kiện tách virus/vi khuẩn thì tiếp tục hỏi.
