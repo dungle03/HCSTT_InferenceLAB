@@ -116,3 +116,104 @@ assert "viem_xoang_cap_do_vi_khuan" in result.final_facts
 | DIFFERENTIAL        | Kết luận “không phải viêm xoang” khi thiếu bằng chứng |
 
 Giữ tên module ổn định giúp bộ lọc giải thích trên trang kết quả hoạt động chính xác và đảm bảo thứ tự ưu tiên nhất quán.
+
+---
+
+## 8) Đầu vào và Đầu ra (chuẩn hoá và ví dụ)
+
+### 8.1 Đầu vào từ phỏng vấn (UI fields)
+- Số/ngày: `thoi_gian_trieu_chung`, `nhiet_do`
+- Radio: `loai_dich_mui` ∈ {"Không có", "Trong, loãng", "Đặc, vàng/xanh"}
+- Boolean triệu chứng chính: `nghet_mui`, `giam_khuu_giac`, `dau_vung_xoang_ham`, `dau_vung_xoang_tran`, `dau_vung_xoang_sang`
+- Boolean mẫu diễn tiến: `trieu_chung_nang_len_sau_5_ngay` (double‑worsening)
+- Boolean phụ/yếu tố nguy cơ: `ho`, `dau_dau`, `hoi_mieng`, `co_di_ung`, `co_hen_suyen`, `co_polyp_mui`, `suy_giam_mien_dich`
+- Boolean red flags: `sung_quanh_mat`, `nhin_mo`, `dau_dau_du_doi`, `cung_gay`
+
+### 8.2 Facts nội bộ sau chuẩn hoá
+- Từ số:
+  - `thoi_gian_trieu_chung` → `trieu_chung_duoi_10_ngay` | `trieu_chung_tren_10_ngay` | `trieu_chung_keo_dai_12_tuan`
+  - `nhiet_do` → `sot` | `sot_rat_cao`
+- Từ radio:
+  - `loai_dich_mui` → `chay_mui_trong` | `chay_mui_dac`
+- Tổng hợp:
+  - `dau_nang_mat` = bất kỳ của `dau_vung_xoang_ham`/`tran`/`sang` là true
+
+### 8.3 API phỏng vấn (vòng hỏi–đáp)
+Yêu cầu (đã có các câu trả lời tạm thời):
+
+```json
+{
+  "answers": {
+    "thoi_gian_trieu_chung": 6,
+    "nghet_mui": true,
+    "loai_dich_mui": "Trong, loãng",
+    "giam_khuu_giac": true
+  }
+}
+```
+
+Phản hồi khi CHƯA đủ kết luận:
+
+```json
+{
+  "ok": true,
+  "done": false,
+  "question": {
+    "id": "dau_vung_xoang_ham",
+    "variable": "dau_vung_xoang_ham",
+    "type": "boolean",
+    "label": "Bạn có đau/căng tức vùng má không?"
+  }
+}
+```
+
+Phản hồi khi ĐÃ đủ kết luận:
+
+```json
+{
+  "ok": true,
+  "done": true,
+  "result_url": "/sinusitis/results/abcdef123456"
+}
+```
+
+### 8.4 Kết quả chẩn đoán (result.json – rút gọn)
+
+```json
+{
+  "session_id": "abcdef123456",
+  "diagnosis": {
+    "disease": "viem_xoang_cap_do_virus",
+    "disease_label": "Viêm xoang cấp do Virus",
+    "severity": "low",
+    "severity_raw": "Mild",
+    "confidence": 100,
+    "success": true
+  },
+  "symptoms": {
+    "input": {
+      "thoi_gian_trieu_chung": 6,
+      "nghet_mui": true,
+      "loai_dich_mui": "Trong, loãng",
+      "giam_khuu_giac": true
+    },
+    "extracted_facts": [
+      "trieu_chung_duoi_10_ngay",
+      "nghet_mui",
+      "giam_khuu_giac",
+      "chay_mui_trong",
+      "viem_xoang_cap",
+      "viem_xoang_cap_do_virus"
+    ]
+  },
+  "recommendation": "Đây có thể là viêm xoang cấp do virus, thường tự khỏi sau 7–10 ngày...\n- Nghỉ ngơi...\n- Rửa mũi...",
+  "inference": {
+    "fired_rules": ["VXC_04", "VXC_VIRUS_01"],
+    "final_facts": ["viem_xoang_cap_do_virus", "viem_xoang_cap"],
+    "steps": 2
+  },
+  "graphs": { "fpg": null, "rpg": null }
+}
+```
+
+Ghi chú: đồ thị suy diễn (FPG/RPG) bị tắt để tối ưu tốc độ và giảm phụ thuộc.
