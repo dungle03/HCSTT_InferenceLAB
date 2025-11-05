@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phỏng vấn Bác sĩ - Chẩn đoán Viêm Xoang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-slate-50">
+    <div class="max-w-3xl mx-auto px-4 py-6">
+        <header class="mb-6">
+            <a href="{{ url_for('medical.landing') }}" class="text-cyan-600 hover:text-cyan-700 text-sm font-medium">
+                <i class="fas fa-arrow-left mr-1"></i> Quay lại trang chủ</a>
+            <h1 class="text-3xl font-bold text-slate-800 mt-2">
+                <i class="fas fa-user-md text-cyan-500"></i> Phỏng vấn Bác sĩ
+            </h1>
+            <p class="text-slate-600">Trả lời một vài câu hỏi. Hệ thống sẽ hỏi như một bác sĩ và đưa ra chẩn đoán.</p>
+        </header>
+
+        <main class="bg-white rounded-lg shadow-sm border border-slate-100 p-6">
+            <div id="chat" class="space-y-4 min-h-[280px]">
+                <div class="flex items-start">
+                    <div class="w-9 h-9 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mr-3">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="bg-slate-100 rounded-2xl px-4 py-3 text-slate-800 max-w-[80%]">
+                        Xin chào! Tôi sẽ hỏi bạn một số câu hỏi để đánh giá nguy cơ viêm xoang. Hãy bắt đầu nhé.
+                    </div>
+                </div>
+            </div>
+
+            <div id="controls" class="mt-6">
+                <!-- Dynamic controls rendered here -->
+            </div>
+
+            <div id="footerNote" class="mt-6 text-xs text-slate-500">
+                Lưu ý: Hệ thống chỉ mang tính tham khảo, không thay thế chẩn đoán của bác sĩ.
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('medical.static', filename='interview.js') }}"></script>
+</body>
+
+</html>

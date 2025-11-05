@@ -1,0 +1,701 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-10-29T10:00:00.000000",
+  "description": "Cơ sở tri thức chuyên sâu về chẩn đoán Viêm Xoang (Sinusitis)",
+  "metadata": {
+    "total_rules": 48,
+    "total_symptoms": 25,
+    "total_diseases": 7,
+    "sources": [
+      "Vinmec",
+      "Mayo Clinic",
+      "American Academy of Otolaryngology"
+    ]
+  },
+  "symptoms": [
+    {
+      "id": "S101",
+      "variable": "dau_nang_mat",
+      "label": "Đau/nặng vùng mặt",
+      "category": "major"
+    },
+    {
+      "id": "S102",
+      "variable": "nghet_mui",
+      "label": "Nghẹt mũi/tắc mũi",
+      "category": "major"
+    },
+    {
+      "id": "S103",
+      "variable": "chay_mui_dac",
+      "label": "Chảy mũi đặc (vàng/xanh)",
+      "category": "major"
+    },
+    {
+      "id": "S104",
+      "variable": "giam_khuu_giac",
+      "label": "Giảm hoặc mất khứu giác",
+      "category": "major"
+    },
+    {
+      "id": "S105",
+      "variable": "sot",
+      "label": "Sốt (trên 38°C)",
+      "category": "minor"
+    },
+    {
+      "id": "S106",
+      "variable": "ho",
+      "label": "Ho, đặc biệt là ho nhiều về đêm",
+      "category": "minor"
+    },
+    {
+      "id": "S107",
+      "variable": "dau_dau",
+      "label": "Đau đầu",
+      "category": "minor"
+    },
+    {
+      "id": "S108",
+      "variable": "dau_rang_ham_tren",
+      "label": "Đau răng hàm trên",
+      "category": "minor"
+    },
+    {
+      "id": "S109",
+      "variable": "hoi_mieng",
+      "label": "Hơi thở có mùi hôi",
+      "category": "minor"
+    },
+    {
+      "id": "S110",
+      "variable": "met_moi",
+      "label": "Mệt mỏi",
+      "category": "minor"
+    },
+    {
+      "id": "S111",
+      "variable": "dau_tai",
+      "label": "Đau hoặc đầy tai",
+      "category": "minor"
+    },
+    {
+      "id": "S112",
+      "variable": "chay_mui_trong",
+      "label": "Chảy mũi trong, loãng",
+      "category": "context"
+    },
+    {
+      "id": "S113",
+      "variable": "trieu_chung_duoi_10_ngay",
+      "label": "Triệu chứng < 10 ngày",
+      "category": "duration"
+    },
+    {
+      "id": "S114",
+      "variable": "trieu_chung_tren_10_ngay",
+      "label": "Triệu chứng > 10 ngày",
+      "category": "duration"
+    },
+    {
+      "id": "S115",
+      "variable": "trieu_chung_nang_len_sau_5_ngay",
+      "label": "Triệu chứng nặng hơn sau 5-7 ngày",
+      "category": "pattern"
+    },
+    {
+      "id": "S116",
+      "variable": "trieu_chung_keo_dai_12_tuan",
+      "label": "Triệu chứng kéo dài > 12 tuần",
+      "category": "duration"
+    },
+    {
+      "id": "S117",
+      "variable": "co_polyp_mui",
+      "label": "Có tiền sử polyp mũi",
+      "category": "risk_factor"
+    },
+    {
+      "id": "S118",
+      "variable": "co_di_ung",
+      "label": "Có tiền sử dị ứng đường hô hấp",
+      "category": "risk_factor"
+    },
+    {
+      "id": "S119",
+      "variable": "co_hen_suyen",
+      "label": "Có tiền sử hen suyễn",
+      "category": "risk_factor"
+    },
+    {
+      "id": "S120",
+      "variable": "suy_giam_mien_dich",
+      "label": "Hệ miễn dịch suy giảm",
+      "category": "risk_factor"
+    },
+    {
+      "id": "S121",
+      "variable": "sot_rat_cao",
+      "label": "Sốt rất cao > 39°C",
+      "category": "red_flag"
+    },
+    {
+      "id": "S122",
+      "variable": "sung_quanh_mat",
+      "label": "Sưng hoặc đỏ quanh mắt",
+      "category": "red_flag"
+    },
+    {
+      "id": "S123",
+      "variable": "nhin_mo",
+      "label": "Nhìn mờ, nhìn đôi",
+      "category": "red_flag"
+    },
+    {
+      "id": "S124",
+      "variable": "dau_dau_du_doi",
+      "label": "Đau đầu dữ dội, không đáp ứng thuốc",
+      "category": "red_flag"
+    },
+    {
+      "id": "S125",
+      "variable": "cung_gay",
+      "label": "Cứng gáy",
+      "category": "red_flag"
+    }
+  ],
+  "diseases": [
+    {
+      "id": "D101",
+      "variable": "viem_xoang_cap",
+      "label": "Viêm xoang cấp",
+      "severity": "Moderate"
+    },
+    {
+      "id": "D102",
+      "variable": "viem_xoang_man_tinh",
+      "label": "Viêm xoang mạn tính",
+      "severity": "Moderate"
+    },
+    {
+      "id": "D103",
+      "variable": "viem_xoang_cap_do_virus",
+      "label": "Viêm xoang cấp do Virus",
+      "severity": "Mild"
+    },
+    {
+      "id": "D104",
+      "variable": "viem_xoang_cap_do_vi_khuan",
+      "label": "Viêm xoang cấp do Vi khuẩn",
+      "severity": "Moderate"
+    },
+    {
+      "id": "D105",
+      "variable": "viem_xoang_do_nam",
+      "label": "Viêm xoang do nấm",
+      "severity": "Severe"
+    },
+    {
+      "id": "D106",
+      "variable": "khong_phai_viem_xoang",
+      "label": "Không đủ dấu hiệu của viêm xoang",
+      "severity": "Info"
+    },
+    {
+      "id": "D107",
+      "variable": "nguy_co_bien_chung",
+      "label": "Nguy cơ biến chứng - Cần khám khẩn cấp",
+      "severity": "Critical"
+    }
+  ],
+  "rules": [
+    {
+      "id": "VXC_01",
+      "module": "ACUTE_DIAGNOSIS",
+      "premises": [
+        "nghet_mui",
+        "dau_nang_mat"
+      ],
+      "conclusion": "viem_xoang_cap",
+      "confidence": 0.8,
+      "notes": "Hai triệu chứng chính -> nghi ngờ viêm xoang cấp."
+    },
+    {
+      "id": "VXC_02",
+      "module": "ACUTE_DIAGNOSIS",
+      "premises": [
+        "nghet_mui",
+        "chay_mui_dac"
+      ],
+      "conclusion": "viem_xoang_cap",
+      "confidence": 0.8,
+      "notes": "Hai triệu chứng chính -> nghi ngờ viêm xoang cấp."
+    },
+    {
+      "id": "VXC_03",
+      "module": "ACUTE_DIAGNOSIS",
+      "premises": [
+        "dau_nang_mat",
+        "chay_mui_dac"
+      ],
+      "conclusion": "viem_xoang_cap",
+      "confidence": 0.8,
+      "notes": "Hai triệu chứng chính -> nghi ngờ viêm xoang cấp."
+    },
+    {
+      "id": "VXC_04",
+      "module": "ACUTE_DIAGNOSIS",
+      "premises": [
+        "nghet_mui",
+        "giam_khuu_giac"
+      ],
+      "conclusion": "viem_xoang_cap",
+      "confidence": 0.75,
+      "notes": "Nghẹt mũi và giảm khứu giác."
+    },
+    {
+      "id": "VXC_05",
+      "module": "ACUTE_DIAGNOSIS",
+      "premises": [
+        "viem_xoang_cap",
+        "ho",
+        "dau_dau"
+      ],
+      "conclusion": "viem_xoang_cap_day_du_trieu_chung",
+      "confidence": 0.9,
+      "notes": "Xác nhận VXC với các triệu chứng phụ."
+    },
+    {
+      "id": "VXC_VIRUS_01",
+      "module": "ACUTE_ETIOLOGY",
+      "premises": [
+        "viem_xoang_cap",
+        "trieu_chung_duoi_10_ngay",
+        "chay_mui_trong"
+      ],
+      "conclusion": "viem_xoang_cap_do_virus",
+      "confidence": 0.9,
+      "notes": "Triệu chứng điển hình của VXC do virus (cảm lạnh thông thường)."
+    },
+    {
+      "id": "VXC_VIRUS_02",
+      "module": "ACUTE_ETIOLOGY",
+      "premises": [
+        "viem_xoang_cap",
+        "trieu_chung_duoi_10_ngay"
+      ],
+      "conclusion": "viem_xoang_cap_do_virus",
+      "confidence": 0.8,
+      "notes": "Nếu không có dấu hiệu bội nhiễm, VXC cấp thường do virus."
+    },
+    {
+      "id": "VXC_BACTERIA_01",
+      "module": "ACUTE_ETIOLOGY",
+      "premises": [
+        "viem_xoang_cap",
+        "trieu_chung_tren_10_ngay",
+        "chay_mui_dac"
+      ],
+      "conclusion": "viem_xoang_cap_do_vi_khuan",
+      "confidence": 0.9,
+      "notes": "Triệu chứng kéo dài > 10 ngày không cải thiện -> nghi ngờ vi khuẩn."
+    },
+    {
+      "id": "VXC_BACTERIA_02",
+      "module": "ACUTE_ETIOLOGY",
+      "premises": [
+        "viem_xoang_cap",
+        "trieu_chung_nang_len_sau_5_ngay"
+      ],
+      "conclusion": "viem_xoang_cap_do_vi_khuan",
+      "confidence": 0.95,
+      "notes": "'Cúm đúp' - triệu chứng nặng lên sau khi tưởng đã đỡ -> dấu hiệu bội nhiễm vi khuẩn."
+    },
+    {
+      "id": "VXC_BACTERIA_03",
+      "module": "ACUTE_ETIOLOGY",
+      "premises": [
+        "viem_xoang_cap",
+        "sot",
+        "chay_mui_dac",
+        "dau_nang_mat"
+      ],
+      "conclusion": "viem_xoang_cap_do_vi_khuan",
+      "confidence": 0.85,
+      "notes": "Tổ hợp triệu chứng nặng (sốt, mủ, đau) -> nghi ngờ vi khuẩn."
+    },
+    {
+      "id": "VXM_01",
+      "module": "CHRONIC_DIAGNOSIS",
+      "premises": [
+        "nghet_mui",
+        "trieu_chung_keo_dai_12_tuan"
+      ],
+      "conclusion": "viem_xoang_man_tinh",
+      "confidence": 0.85,
+      "notes": "Nghẹt mũi kéo dài là triệu chứng chính của VXM."
+    },
+    {
+      "id": "VXM_02",
+      "module": "CHRONIC_DIAGNOSIS",
+      "premises": [
+        "chay_mui_dac",
+        "trieu_chung_keo_dai_12_tuan"
+      ],
+      "conclusion": "viem_xoang_man_tinh",
+      "confidence": 0.85,
+      "notes": "Chảy mũi mủ kéo dài."
+    },
+    {
+      "id": "VXM_03",
+      "module": "CHRONIC_DIAGNOSIS",
+      "premises": [
+        "dau_nang_mat",
+        "trieu_chung_keo_dai_12_tuan"
+      ],
+      "conclusion": "viem_xoang_man_tinh",
+      "confidence": 0.8,
+      "notes": "Đau mặt kéo dài."
+    },
+    {
+      "id": "VXM_04",
+      "module": "CHRONIC_DIAGNOSIS",
+      "premises": [
+        "giam_khuu_giac",
+        "trieu_chung_keo_dai_12_tuan"
+      ],
+      "conclusion": "viem_xoang_man_tinh",
+      "confidence": 0.8,
+      "notes": "Giảm khứu giác kéo dài."
+    },
+    {
+      "id": "VXM_05",
+      "module": "CHRONIC_DIAGNOSIS",
+      "premises": [
+        "viem_xoang_man_tinh",
+        "co_polyp_mui"
+      ],
+      "conclusion": "viem_xoang_man_tinh_co_polyp",
+      "confidence": 0.95,
+      "notes": "Xác định thể VXM có polyp."
+    },
+    {
+      "id": "VXM_06",
+      "module": "CHRONIC_DIAGNOSIS",
+      "premises": [
+        "viem_xoang_man_tinh",
+        "co_di_ung",
+        "co_hen_suyen"
+      ],
+      "conclusion": "viem_xoang_man_tinh_kem_di_ung",
+      "confidence": 0.9,
+      "notes": "VXM thường đi kèm với cơ địa dị ứng, hen suyễn."
+    },
+    {
+      "id": "FUNGAL_01",
+      "module": "FUNGAL_DIAGNOSIS",
+      "premises": [
+        "viem_xoang_man_tinh",
+        "suy_giam_mien_dich"
+      ],
+      "conclusion": "viem_xoang_do_nam",
+      "confidence": 0.8,
+      "notes": "Người suy giảm miễn dịch có nguy cơ cao bị viêm xoang do nấm."
+    },
+    {
+      "id": "FUNGAL_02",
+      "module": "FUNGAL_DIAGNOSIS",
+      "premises": [
+        "viem_xoang_man_tinh_co_polyp",
+        "chay_mui_dac"
+      ],
+      "conclusion": "viem_xoang_do_nam_di_ung",
+      "confidence": 0.85,
+      "notes": "Dịch mũi đặc, giống bã đậu có thể là dấu hiệu của nấm."
+    },
+    {
+      "id": "RED_FLAG_01",
+      "module": "COMPLICATIONS",
+      "premises": [
+        "viem_xoang_cap",
+        "sot_rat_cao",
+        "dau_dau_du_doi"
+      ],
+      "conclusion": "nguy_co_bien_chung",
+      "confidence": 1.0,
+      "notes": "Nguy cơ biến chứng nội sọ (viêm màng não)."
+    },
+    {
+      "id": "RED_FLAG_02",
+      "module": "COMPLICATIONS",
+      "premises": [
+        "viem_xoang_cap",
+        "sung_quanh_mat",
+        "nhin_mo"
+      ],
+      "conclusion": "nguy_co_bien_chung",
+      "confidence": 1.0,
+      "notes": "Nguy cơ biến chứng mắt (viêm mô tế bào hốc mắt)."
+    },
+    {
+      "id": "RED_FLAG_03",
+      "module": "COMPLICATIONS",
+      "premises": [
+        "viem_xoang_cap",
+        "cung_gay"
+      ],
+      "conclusion": "nguy_co_bien_chung",
+      "confidence": 1.0,
+      "notes": "Dấu hiệu màng não -> cần cấp cứu."
+    },
+    {
+      "id": "RED_FLAG_A",
+      "module": "COMPLICATIONS",
+      "premises": [
+        "sot_rat_cao",
+        "dau_dau_du_doi"
+      ],
+      "conclusion": "nguy_co_bien_chung",
+      "confidence": 1.0,
+      "notes": "Sốt rất cao + đau đầu dữ dội: nghi biến chứng nội sọ ngay cả khi chưa khẳng định viêm xoang."
+    },
+    {
+      "id": "RED_FLAG_B",
+      "module": "COMPLICATIONS",
+      "premises": [
+        "sung_quanh_mat",
+        "nhin_mo"
+      ],
+      "conclusion": "nguy_co_bien_chung",
+      "confidence": 1.0,
+      "notes": "Sưng quanh mắt + nhìn mờ: nghi biến chứng hốc mắt."
+    },
+    {
+      "id": "RED_FLAG_C",
+      "module": "COMPLICATIONS",
+      "premises": [
+        "cung_gay"
+      ],
+      "conclusion": "nguy_co_bien_chung",
+      "confidence": 1.0,
+      "notes": "Cứng gáy là dấu hiệu cảnh báo màng não."
+    },
+    {
+      "id": "NEGATIVE_01",
+      "module": "DIFFERENTIAL",
+      "premises": [
+        "chay_mui_trong",
+        "nghet_mui"
+      ],
+      "conclusion": "cam_lanh_thong_thuong",
+      "confidence": 0.7,
+      "notes": "Nếu chỉ có chảy mũi trong và nghẹt mũi nhẹ, có thể chỉ là cảm lạnh."
+    }
+  ],
+  "fact_rules": [
+    {
+      "fact": "trieu_chung_duoi_10_ngay",
+      "condition": "thoi_gian_trieu_chung < 10"
+    },
+    {
+      "fact": "trieu_chung_tren_10_ngay",
+      "condition": "thoi_gian_trieu_chung >= 10"
+    },
+    {
+      "fact": "trieu_chung_keo_dai_12_tuan",
+      "condition": "thoi_gian_trieu_chung >= 84"
+    },
+    {
+      "fact": "sot",
+      "condition": "nhiet_do > 38"
+    },
+    {
+      "fact": "sot_rat_cao",
+      "condition": "nhiet_do > 39"
+    },
+    {
+      "fact": "dau_nang_mat",
+      "condition": "dau_vung_xoang_ham === true || dau_vung_xoang_tran === true || dau_vung_xoang_sang === true"
+    }
+  ],
+  "form_config": {
+    "steps": [
+      {
+        "title": "Thông tin Cơ bản",
+        "fields": [
+          {
+            "id": "tuoi",
+            "variable": "tuoi",
+            "label": "Tuổi",
+            "type": "number",
+            "required": true
+          },
+          {
+            "id": "thoi_gian_trieu_chung",
+            "variable": "thoi_gian_trieu_chung",
+            "label": "Triệu chứng đã kéo dài bao nhiêu ngày?",
+            "type": "number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "title": "Triệu chứng chính",
+        "fields": [
+          {
+            "id": "dau_vung_xoang_ham",
+            "variable": "dau_vung_xoang_ham",
+            "label": "Đau/căng tức vùng má",
+            "type": "boolean"
+          },
+          {
+            "id": "dau_vung_xoang_tran",
+            "variable": "dau_vung_xoang_tran",
+            "label": "Đau/căng tức vùng trán",
+            "type": "boolean"
+          },
+          {
+            "id": "dau_vung_xoang_sang",
+            "variable": "dau_vung_xoang_sang",
+            "label": "Đau/căng tức giữa hai mắt",
+            "type": "boolean"
+          },
+          {
+            "id": "nghet_mui",
+            "variable": "nghet_mui",
+            "label": "Nghẹt mũi, khó thở bằng mũi",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "id": "loai_dich_mui",
+            "variable": "loai_dich_mui",
+            "label": "Loại dịch mũi",
+            "type": "radio",
+            "options": [
+              "Không có",
+              "Trong, loãng",
+              "Đặc, vàng/xanh"
+            ]
+          },
+          {
+            "id": "giam_khuu_giac",
+            "variable": "giam_khuu_giac",
+            "label": "Khứu giác (ngửi) bị giảm hoặc mất",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "title": "Triệu chứng phụ & Yếu tố nguy cơ",
+        "fields": [
+          {
+            "id": "nhiet_do",
+            "variable": "nhiet_do",
+            "label": "Nhiệt độ cơ thể (°C)",
+            "type": "number",
+            "default": 37.0
+          },
+          {
+            "id": "ho",
+            "variable": "ho",
+            "label": "Ho",
+            "type": "boolean"
+          },
+          {
+            "id": "dau_dau",
+            "variable": "dau_dau",
+            "label": "Đau đầu",
+            "type": "boolean"
+          },
+          {
+            "id": "hoi_mieng",
+            "variable": "hoi_mieng",
+            "label": "Hơi thở có mùi hôi",
+            "type": "boolean"
+          },
+          {
+            "id": "co_di_ung",
+            "variable": "co_di_ung",
+            "label": "Có tiền sử viêm mũi dị ứng",
+            "type": "boolean"
+          },
+          {
+            "id": "co_hen_suyen",
+            "variable": "co_hen_suyen",
+            "label": "Có tiền sử hen suyễn",
+            "type": "boolean"
+          },
+          {
+            "id": "co_polyp_mui",
+            "variable": "co_polyp_mui",
+            "label": "Có tiền sử polyp mũi",
+            "type": "boolean"
+          },
+          {
+            "id": "suy_giam_mien_dich",
+            "variable": "suy_giam_mien_dich",
+            "label": "Đang có tình trạng suy giảm miễn dịch (tiểu đường, HIV, dùng corticoid...)",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "title": "Dấu hiệu cảnh báo (Red Flags)",
+        "fields": [
+          {
+            "id": "sung_quanh_mat",
+            "variable": "sung_quanh_mat",
+            "label": "Sưng, đỏ, hoặc đau quanh mắt",
+            "type": "boolean"
+          },
+          {
+            "id": "nhin_mo",
+            "variable": "nhin_mo",
+            "label": "Nhìn mờ, nhìn đôi, hoặc thay đổi thị lực",
+            "type": "boolean"
+          },
+          {
+            "id": "dau_dau_du_doi",
+            "variable": "dau_dau_du_doi",
+            "label": "Đau đầu dữ dội, không chịu nổi",
+            "type": "boolean"
+          },
+          {
+            "id": "cung_gay",
+            "variable": "cung_gay",
+            "label": "Cứng gáy",
+            "type": "boolean"
+          }
+        ]
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "condition": "viem_xoang_cap_do_virus",
+      "recommendation": "Đây có thể là viêm xoang cấp do virus, thường tự khỏi sau 7-10 ngày.\n\n**Chăm sóc tại nhà:**\n- **Nghỉ ngơi:** Để cơ thể có sức chống lại virus.\n- **Uống nhiều nước:** Giúp làm loãng dịch nhầy.\n- **Rửa mũi:** Sử dụng nước muối sinh lý 2-3 lần/ngày để làm sạch mũi.\n- **Xông hơi:** Hít hơi nước ấm từ vòi sen, máy xông hoặc bát nước nóng để giảm nghẹt mũi.\n- **Thuốc giảm đau:** Có thể dùng Paracetamol hoặc Ibuprofen nếu đau đầu, đau mặt.\n\n**Theo dõi:** Nếu triệu chứng không cải thiện sau 10 ngày hoặc trở nên tồi tệ hơn, hãy tái khám.",
+      "priority": "Low"
+    },
+    {
+      "condition": "viem_xoang_cap_do_vi_khuan",
+      "recommendation": "Các triệu chứng cho thấy khả năng cao bạn bị viêm xoang cấp do vi khuẩn (bội nhiễm).\n\n**Hành động:**\n- **Khám bác sĩ:** Cần đến gặp bác sĩ chuyên khoa Tai-Mũi-Họng để được chẩn đoán chính xác.\n- **Kháng sinh:** Bác sĩ có thể sẽ kê đơn kháng sinh. Hãy tuân thủ đúng liều lượng và thời gian điều trị, không tự ý ngưng thuốc.\n- **Tiếp tục chăm sóc tại nhà:** Rửa mũi, uống nhiều nước, nghỉ ngơi.\n\n**Lưu ý:** Không tự ý mua và sử dụng kháng sinh.",
+      "priority": "Medium"
+    },
+    {
+      "condition": "viem_xoang_man_tinh",
+      "recommendation": "Triệu chứng kéo dài cho thấy bạn có thể bị viêm xoang mạn tính.\n\n**Hành động:**\n- **Khám chuyên khoa:** Đây là tình trạng cần được bác sĩ Tai-Mũi-Họng quản lý lâu dài.\n- **Nội soi mũi xoang:** Bác sĩ có thể cần nội soi để đánh giá tình trạng bên trong mũi xoang.\n- **Điều trị:** Điều trị có thể bao gồm thuốc xịt mũi chứa steroid, rửa mũi, và các loại thuốc khác. Trong một số trường hợp, phẫu thuật có thể được cân nhắc.\n\n**Lối sống:**\n- Tránh các tác nhân gây dị ứng và khói thuốc lá.\n- Giữ độ ẩm trong nhà ở mức hợp lý.",
+      "priority": "High"
+    },
+    {
+      "condition": "nguy_co_bien_chung",
+      "recommendation": "!!! CẢNH BÁO KHẨN CẤP !!!\n\nCác triệu chứng của bạn là dấu hiệu của biến chứng nguy hiểm từ viêm xoang (như nhiễm trùng hốc mắt, viêm màng não).\n\n**HÀNH ĐỘNG NGAY LẬP TỨC:**\n- **ĐẾN PHÒNG CẤP CỨU CỦA BỆNH VIỆN GẦN NHẤT.**\n- **KHÔNG TỰ LÁI XE.** Hãy gọi cấp cứu 115 hoặc nhờ người thân đưa đi.\n\nĐây là tình huống y tế khẩn cấp, cần được can thiệp ngay để tránh hậu quả nghiêm trọng.",
+      "priority": "Critical"
+    },
+    {
+      "condition": "khong_phai_viem_xoang",
+      "recommendation": "Dựa trên các triệu chứng bạn cung cấp, chưa đủ bằng chứng rõ ràng để kết luận là viêm xoang. Các triệu chứng có thể do cảm lạnh thông thường hoặc viêm mũi dị ứng.\n\n**Gợi ý:**\n- Tiếp tục theo dõi triệu chứng.\n- Có thể áp dụng các biện pháp chăm sóc tại nhà như uống nhiều nước, nghỉ ngơi.\n- Nếu triệu chứng kéo dài hoặc nặng hơn, hãy tham khảo ý kiến bác sĩ.",
+      "priority": "Info"
+    }
+  ]
+}

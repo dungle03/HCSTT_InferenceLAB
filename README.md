@@ -30,33 +30,28 @@ Giao diện dành cho nhà phát triển/nhà nghiên cứu để thao tác tr�
 - 📐 **16 luật tam giác**: Tính cạnh, góc, diện tích
 - ✏️ **Custom rules**: Nhập luật tùy chỉnh để test
 
-### 🏥 Medical Diagnosis - Hệ thống Chẩn đoán Y tế AI
+### 🏥 Sinusitis Diagnosis - Hệ thống Chẩn đoán Viêm Xoang (MỚI)
 
-Giao diện thân thiện cho người dùng cuối (bệnh nhân):
+Giao diện cho người dùng cuối, tập trung chuyên sâu vào một bệnh duy nhất: Viêm xoang.
 
-#### **Knowledge Base**
-- 📚 **109 medical rules** từ `medical_kb.json`
-- 🦠 **20 bệnh phổ biến**: Cảm cúm, COVID-19, viêm phổi, viêm họng, hen suyễn, viêm dạ dày, ngộ độc thực phẩm...
-- 🩺 **30+ triệu chứng**: Sốt, ho, đau đầu, khó thở, đau bụng, buồn nôn...
-- 🏷️ **7 modules**: SYMP, RESP, DIGE, CARD, ENDO, EMER, RECO
+#### Knowledge Base (KB)
+- 📚 45+ luật suy diễn trong `data/sinusitis_kb.json`
+- � Phân loại: viêm xoang cấp (virus/vi khuẩn), mạn tính (có/không polyp), viêm xoang do nấm
+- 🩺 Triệu chứng: nhóm chính (đau vùng mặt, nghẹt mũi, dịch mũi đặc, giảm khứu giác), nhóm phụ và red-flags
+- 🧪 Fact mapping: Quy tắc suy diễn fact từ form (fact_rules) cho điều kiện số liệu như nhiệt độ, thời gian bệnh
 
-#### **Smart Diagnosis Scorer**
-Hệ thống chấm điểm thông minh với thuật toán Weighted Evidence Accumulation:
+#### Suy diễn & Kết quả
+- 🔗 Thuần suy diễn tiến (Forward Chaining) – KHÔNG dùng tính điểm hay AI scoring
+- � Chẩn đoán theo mức ưu tiên: biến chứng > nấm > vi khuẩn > mạn > virus > cấp
+- � Trả về khuyến nghị điều trị/khám phù hợp theo loại viêm xoang
+- 📈 Tùy chọn xuất đồ thị FPG/RPG nếu hệ thống có Graphviz
 
-- 🎯 **Trọng số triệu chứng**: Mỗi triệu chứng có trọng số khác nhau (0.0-1.0)
-- ➕ **Positive Evidence**: Triệu chứng phù hợp tăng điểm (+)
-- ➖ **Negative Evidence**: Triệu chứng trái ngược giảm điểm (-)
-- 🎁 **Combo Bonuses**: Thưởng điểm khi có tổ hợp triệu chứng đặc trưng
-- ⚠️ **Severity Penalties**: Phạt khi bệnh nhẹ nhưng có triệu chứng nặng
-- 📊 **Prior Probability**: Xác suất tiền nghiệm từ thống kê y tế
-- 🏆 **Top 2-3 Diagnoses**: Hiển thị các bệnh có khả năng cao nhất
+#### Giao diện người dùng
+- 🧙 Wizard 4 bước (thông tin cơ bản → triệu chứng chính → triệu chứng phụ/yếu tố nguy cơ → red flags)
+- 🎨 TailwindCSS (theme xanh-cam) + JS thuần (`web/static/sinusitis/sinusitis.js`)
+- � Trang kết quả có: kết luận, severity, luật đã kích hoạt, khuyến nghị, và đồ thị (nếu có)
 
-#### **UI/UX**
-- 🧙 **Wizard Form**: Form nhập triệu chứng từng bước
-- 📊 **Confidence Score**: Hiển thị độ tin cậy (0-100%)
-- 🎨 **Severity Color**: Low (xanh) / Medium (vàng) / High (đỏ)
-- 💊 **Treatment Recommendations**: Khuyến nghị điều trị cụ thể
-- 📈 **Inference Visualization**: Xem quá trình inference (optional)
+Đường dẫn: http://127.0.0.1:5000/sinusitis
 
 ## 📁 Kiến trúc Project
 
@@ -214,17 +209,19 @@ python run.py
 ============================================================
 🧠 Intelligent Diagnosis System
 ============================================================
-✅ Inference Lab: http://127.0.0.1:5000/lab
-✅ Medical Diagnosis: http://127.0.0.1:5000/medical
-============================================================
- * Running on http://127.0.0.1:5000
+✅ Inference Lab: http://127.0.0.1:<PORT>/lab
+✅ Sinusitis Diagnosis: http://127.0.0.1:<PORT>/sinusitis
+ ============================================================
+  * Running on http://127.0.0.1:<PORT>
 ```
 
 ### Bước 6: Truy cập trong trình duyệt
 
-- **🏠 Home**: http://127.0.0.1:5000
-- **🔬 Inference Lab**: http://127.0.0.1:5000/lab  
-- **🏥 Medical Diagnosis**: http://127.0.0.1:5000/medical
+- The app will automatically choose an available port from [5000, 5001, 5050, 8080].
+- Replace <PORT> below with the printed one in your console.
+- **🏠 Home**: http://127.0.0.1:<PORT>
+- **🔬 Inference Lab**: http://127.0.0.1:<PORT>/lab  
+- **🏥 Sinusitis Diagnosis**: http://127.0.0.1:<PORT>/sinusitis
 
 ---
 
@@ -242,22 +239,13 @@ python run.py
 6. **Nhập Goals**: Ví dụ: `c, dien_tich`
 7. **Run Inference**: Xem kết quả và đồ thị FPG/RPG
 
-### 🏥 Medical Diagnosis
+### 🏥 Sinusitis Diagnosis
 
-1. Truy cập http://127.0.0.1:5000/medical
+1. Truy cập http://127.0.0.1:5000/sinusitis
 2. Click **"Bắt đầu Chẩn đoán"**
-3. **Nhập triệu chứng** theo wizard:
-   - Nhiệt độ (°C)
-   - Các triệu chứng: Ho, Đau đầu, Khó thở...
-   - SpO2 (%)
-   - Tuổi
-4. **Submit**: Hệ thống chạy inference và chấm điểm
-5. **Xem kết quả**:
-   - Top 2-3 bệnh có khả năng cao nhất
-   - Confidence score (0-100%)
-   - Severity level (Low/Medium/High)
-   - Treatment recommendations
-   - Matched symptoms
+3. Điền wizard 4 bước (ngày bệnh, nhiệt độ, triệu chứng mũi/xoang, yếu tố nguy cơ, red-flags)
+4. Submit để hệ thống chạy suy diễn tiến
+5. Xem kết quả: Loại viêm xoang (nếu có), severity, luật được kích hoạt, khuyến nghị, và đồ thị (nếu bật Graphviz)
 
 ---
 
@@ -566,23 +554,19 @@ ls data/medical_kb.json
 python data/generate_medical_kb.py
 ```
 
-### Port 5000 already in use
+### Port errors on Windows (including 10013 Access Denied)
 
-**Error**: `OSError: [Errno 48] Address already in use`
+- `WinError 10013: An attempt was made to access a socket in a way forbidden by its access permissions`.
+  - Some environments block port 5000. The app now auto-selects a port from [5000, 5001, 5050, 8080].
+  - If it still fails, run your terminal as Administrator or temporarily disable restrictive firewall/VPN rules.
+  - You can also set a custom port in `run.py` if needed.
 
-**Solution**:
-```bash
-# Kill process on port 5000
-# Windows
-netstat -ano | findstr :5000
-taskkill /PID <PID> /F
-
-# macOS/Linux
-lsof -ti:5000 | xargs kill -9
-
-# Or use different port
-# Edit run.py: app.run(port=5001)
-```
+- `Address already in use`
+  - Find and kill the process or pick another port:
+  ```powershell
+  netstat -ano | findstr :5000
+  taskkill /PID <PID> /F
+  ```
 
 ---
 

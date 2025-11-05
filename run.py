@@ -12,6 +12,25 @@ project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
 from web import create_app
+import socket
+
+
+def _choose_port(candidates=(5000, 5001, 5050, 8080)) -> int:
+    """Pick the first port we can bind to (workaround for Windows 10013)."""
+    for p in candidates:
+        s = socket.socket()
+        try:
+            s.bind(("127.0.0.1", p))
+            s.close()
+            return p
+        except OSError:
+            try:
+                s.close()
+            except Exception:
+                pass
+            continue
+    # Fallback to last candidate if all quick probes failed
+    return candidates[-1]
 
 
 def main():
@@ -20,10 +39,11 @@ def main():
     print("=" * 60)
     print("🧠 Intelligent Diagnosis System")
     print("=" * 60)
-    print("✅ Inference Lab: http://127.0.0.1:5000/lab")
-    print("✅ Medical Diagnosis: http://127.0.0.1:5000/medical")
+    port = _choose_port()
+    print(f"✅ Inference Lab: http://127.0.0.1:{port}/lab")
+    print(f"✅ Sinusitis Diagnosis: http://127.0.0.1:{port}/sinusitis")
     print("=" * 60)
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    app.run(host="127.0.0.1", port=port, debug=False)
 
 
 if __name__ == "__main__":

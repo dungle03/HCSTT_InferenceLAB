@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Chẩn đoán Viêm Xoang - Sinusitis AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50">
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="float-animation mb-4">
+                <i class="fas fa-head-side-cough text-6xl"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">AI Chẩn đoán Viêm Xoang</h1>
+            <p class="text-xl md:text-2xl mb-6 opacity-95">Phân tích triệu chứng, xác định nguyên nhân và nhận khuyến
+                nghị</p>
+            <p class="max-w-2xl mx-auto mb-8 text-lg opacity-90 leading-relaxed">
+                Hệ thống sử dụng cơ sở tri thức chuyên sâu với <strong>{{ metadata.total_rules }} luật suy diễn</strong>
+                dựa trên các hướng dẫn y khoa hàng đầu để đánh giá nguy cơ mắc bệnh viêm xoang của bạn.
+            </p>
+            <div class="flex flex-col md:flex-row gap-3 items-center justify-center">
+                <a href="{{ url_for('medical.interview') }}"
+                    class="inline-block px-8 py-4 bg-white text-cyan-600 rounded-lg font-semibold text-lg hover:bg-slate-100 transition-all transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-user-md mr-2"></i> Phỏng vấn Bác sĩ (Q&A)
+                </a>
+            </div>
+
+            <div class="mt-10 max-w-2xl mx-auto glass-effect rounded-xl p-6">
+                <p class="text-sm md:text-base opacity-95">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> <strong>Lưu ý:</strong> Hệ thống chỉ mang tính tham
+                    khảo và không thay thế chẩn đoán của bác sĩ.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Hệ thống có thể phân biệt</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div
+                    class="bg-white border-2 border-slate-100 rounded-xl p-6 hover:shadow-lg transition-all hover:border-cyan-200">
+                    <div class="text-5xl mb-4 text-cyan-500"><i class="fas fa-virus"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Viêm xoang cấp do Virus</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Triệu chứng giống cảm lạnh, thường tự khỏi.</p>
+                </div>
+
+                <div
+                    class="bg-white border-2 border-slate-100 rounded-xl p-6 hover:shadow-lg transition-all hover:border-orange-200">
+                    <div class="text-5xl mb-4 text-orange-500"><i class="fas fa-bacterium"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Viêm xoang cấp do Vi khuẩn</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Triệu chứng kéo dài hoặc nặng hơn, có thể cần kháng sinh.</p>
+                </div>
+
+                <div
+                    class="bg-white border-2 border-slate-100 rounded-xl p-6 hover:shadow-lg transition-all hover:border-blue-200">
+                    <div class="text-5xl mb-4 text-blue-500"><i class="fas fa-calendar-alt"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Viêm xoang Mạn tính</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Triệu chứng kéo dài trên 12 tuần, cần quản lý lâu dài.</p>
+                </div>
+
+                <div
+                    class="bg-white border-2 border-slate-100 rounded-xl p-6 hover:shadow-lg transition-all hover:border-red-200">
+                    <div class="text-5xl mb-4 text-red-500"><i class="fas fa-biohazard"></i></div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Dấu hiệu Nguy hiểm</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Phát hiện các dấu hiệu cảnh báo biến chứng cần cấp cứu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 px-4 bg-slate-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+                    <div class="text-4xl font-bold text-cyan-600 mb-2">{{ metadata.total_rules }}+</div>
+                    <div class="text-slate-600 font-medium">Luật Suy diễn Y khoa</div>
+                </div>
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+                    <div class="text-4xl font-bold text-cyan-600 mb-2">~3 phút</div>
+                    <div class="text-slate-600 font-medium">Thời gian kiểm tra</div>
+                </div>
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+                    <div class="text-4xl font-bold text-cyan-600 mb-2">100%</div>
+                    <div class="text-slate-600 font-medium">Miễn phí & Bảo mật</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 px-4">
+        <div class="max-w-4xl mx-auto text-center text-sm text-slate-600">
+            <p>
+                <a href="{{ url_for('lab.index') }}" class="text-cyan-600 hover:text-cyan-700">🧪 Developer Lab</a>
+                |
+                <a href="https://github.com/dungle03/HCSTT_InferenceLAB" target="_blank"
+                    class="text-cyan-600 hover:text-cyan-700">📦 GitHub</a> |
+                <span>© {{ current_year }} Sinusitis AI Diagnosis</span>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

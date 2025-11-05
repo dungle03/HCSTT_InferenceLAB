@@ -166,6 +166,19 @@ def extract_facts_from_form(form_data: Dict[str, Any], kb: Any) -> Set[str]:
             # Skip invalid conditions
             continue
 
+    # Map specific categorical inputs to fact variables (domain-specific)
+    # Normalize strings to lowercase for robust matching
+    def _norm(v: Any) -> str:
+        return str(v).strip().lower() if v is not None else ""
+
+    # Map 'loai_dich_mui' radio to chay_mui_trong / chay_mui_dac
+    muc_dich = _norm(form_data.get("loai_dich_mui"))
+    if muc_dich:
+        if "trong" in muc_dich:
+            facts.add("chay_mui_trong")
+        if any(key in muc_dich for key in ["đặc", "dac", "vàng", "vang", "xanh"]):
+            facts.add("chay_mui_dac")
+
     # Also add direct boolean fields
     for key, value in form_data.items():
         if isinstance(value, bool) and value:

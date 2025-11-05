@@ -14,20 +14,27 @@ from inference_lab.models import Rule
 
 
 class MedicalKnowledgeBase:
-    """Medical Knowledge Base with 100+ rules for diagnosis."""
+    """Medical Knowledge Base loader for medical/specialized KBs.
 
-    def __init__(self, json_path: Optional[str] = None):
+    Compatible with both the legacy medical_kb.json and the new sinusitis_kb.json
+    structures. Accepts either 'json_path' or 'kb_path' for convenience.
+    """
+
+    def __init__(self, json_path: Optional[str] = None, kb_path: Optional[str] = None):
         """Initialize Medical KB.
 
         Args:
-            json_path: Path to medical_kb.json. If None, uses default path.
+            json_path: Path to KB JSON file (legacy name).
+            kb_path: Alias for json_path. If both provided, kb_path takes precedence.
         """
-        if json_path is None:
-            # Default path relative to project root
+        # Support both parameter names
+        chosen_path = kb_path or json_path
+        if chosen_path is None:
+            # Default path relative to project root (legacy multi-disease KB)
             base_path = Path(__file__).parent.parent
-            json_path = base_path / "data" / "medical_kb.json"
+            chosen_path = base_path / "data" / "medical_kb.json"
 
-        self.json_path = Path(json_path)
+        self.json_path = Path(chosen_path)
         self.data = self._load_json()
         self.kb = self._create_knowledge_base()
 
@@ -45,6 +52,8 @@ class MedicalKnowledgeBase:
     def _create_knowledge_base(self) -> KnowledgeBase:
         """Create KnowledgeBase instance from JSON data."""
         kb = KnowledgeBase(name="Medical KB")
+        # Map internal numeric rule.id -> original JSON rule metadata (id, notes, module...)
+        self._rule_meta_by_internal_id: Dict[int, Dict[str, Any]] = {}
 
         # Add all rules
         for rule_data in self.data["rules"]:
@@ -52,7 +61,15 @@ class MedicalKnowledgeBase:
             premises_text = " ^ ".join(rule_data["premises"])
             rule_text = f"{premises_text} -> {rule_data['conclusion']}"
 
-            kb.add_rule_from_text(rule_text)
+            rule = kb.add_rule_from_text(rule_text)
+            # Store mapping for explanations in results page
+            self._rule_meta_by_internal_id[rule.id] = {
+                "json_id": rule_data.get("id"),
+                "module": rule_data.get("module"),
+                "premises": list(rule.premises),
+                "conclusion": rule.conclusion,
+                "notes": rule_data.get("notes"),
+            }
 
         return kb
 
@@ -76,8 +93,24 @@ class MedicalKnowledgeBase:
         return matching_rules
 
     def get_form_fields(self) -> List[Dict[str, Any]]:
-        """Get form configuration for dynamic form generation."""
-        return self.data["form_config"]["fields"]
+        """Get flattened form fields for backward compatibility.
+
+        - Legacy format: form_config.fields (flat list)
+        - New format: form_config.steps[*].fields (multi-step)
+        """
+        fc = self.data.get("form_config", {})
+        # Legacy flat layout
+        if "fields" in fc and isinstance(fc["fields"], list):
+            return fc["fields"]
+        # New stepped layout
+        fields: List[Dict[str, Any]] = []
+        for step in fc.get("steps", []) or []:
+            fields.extend(step.get("fields", []))
+        return fields
+
+    def get_form_config(self) -> Dict[str, Any]:
+        """Return raw form configuration (supports multi-step sinusitis UI)."""
+        return self.data.get("form_config", {})
 
     def get_recommendation(self, disease: str) -> str:
         """Get treatment recommendation for a disease.
@@ -100,6 +133,18 @@ class MedicalKnowledgeBase:
             if disease_data["variable"] == disease:
                 return disease_data
         return None
+
+    def get_diseases(self) -> List[Dict[str, Any]]:
+        """Return disease list (used to build inference goals)."""
+        return list(self.data.get("diseases", []))
+
+    def get_rule_info(self, internal_rule_id: int) -> Optional[Dict[str, Any]]:
+        """Return rule metadata by internal numeric id used by the engine.
+
+        The returned dict includes keys: json_id, module, premises, conclusion, notes.
+        Returns None if not found.
+        """
+        return self._rule_meta_by_internal_id.get(int(internal_rule_id))
 
     def get_symptom_label(self, symptom: str) -> str:
         """Get human-readable label for a symptom variable."""
