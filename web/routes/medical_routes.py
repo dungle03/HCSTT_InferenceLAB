@@ -71,85 +71,86 @@ def get_sinusitis_kb() -> Any:
 
 # Ordered question bank (prioritize red flags and major symptoms)
 INTERVIEW_QUESTIONS: List[Dict[str, Any]] = [
-    # Red flags first
+    # 1) Red flags trước - hỏi rất rõ ràng, giống bác sĩ sàng lọc nguy hiểm
     {
         "id": "sung_quanh_mat",
         "variable": "sung_quanh_mat",
         "type": "boolean",
-        "label": "Bạn có sưng, đỏ hoặc đau quanh mắt không?",
+        "label": "Mình hỏi trước một dấu hiệu quan trọng nhé: Gần đây bạn có sưng, đỏ hoặc đau quanh mắt không?",
     },
     {
         "id": "nhin_mo",
         "variable": "nhin_mo",
         "type": "boolean",
-        "label": "Bạn có nhìn mờ, nhìn đôi hoặc thay đổi thị lực không?",
+        "label": "Mắt bạn có bị nhìn mờ, nhìn đôi hoặc thay đổi thị lực bất thường không?",
     },
     {
         "id": "dau_dau_du_doi",
         "variable": "dau_dau_du_doi",
         "type": "boolean",
-        "label": "Bạn có đau đầu dữ dội, không chịu nổi không?",
+        "label": "Bạn có gặp cơn đau đầu rất dữ dội, không đáp ứng với thuốc giảm đau thông thường không?",
     },
     {
         "id": "cung_gay",
         "variable": "cung_gay",
         "type": "boolean",
-        "label": "Bạn có bị cứng gáy không?",
+        "label": "Bạn có cảm giác cứng gáy, khó cúi gập cổ không?",
     },
-    # Core timing and major symptoms
+    # 2) Thời gian triệu chứng - nền tảng để phân biệt virus/vi khuẩn/mạn tính
     {
         "id": "thoi_gian_trieu_chung",
         "variable": "thoi_gian_trieu_chung",
         "type": "number",
-        "label": "Triệu chứng của bạn đã kéo dài bao nhiêu ngày?",
+        "label": "Triệu chứng khó chịu (nghẹt mũi, đau mặt, chảy mũi...) đã kéo dài khoảng bao nhiêu ngày?",
         "min": 0,
         "max": 365,
         "step": 1,
     },
+    # 3) Triệu chứng chính của viêm xoang
     {
         "id": "nghet_mui",
         "variable": "nghet_mui",
         "type": "boolean",
-        "label": "Bạn có nghẹt mũi hoặc khó thở bằng mũi không?",
+        "label": "Hiện tại bạn có bị nghẹt mũi hoặc khó thở bằng mũi rõ rệt không?",
     },
     {
         "id": "dau_vung_xoang_ham",
         "variable": "dau_vung_xoang_ham",
         "type": "boolean",
-        "label": "Bạn có đau/căng tức vùng má không?",
+        "label": "Bạn có đau hoặc căng tức vùng má (xoang hàm) không?",
     },
     {
         "id": "dau_vung_xoang_tran",
         "variable": "dau_vung_xoang_tran",
         "type": "boolean",
-        "label": "Bạn có đau/căng tức vùng trán không?",
+        "label": "Bạn có đau hoặc căng tức vùng trán (xoang trán) không?",
     },
     {
         "id": "loai_dich_mui",
         "variable": "loai_dich_mui",
         "type": "radio",
-        "label": "Bạn có bị chảy mũi không? Nếu có, loại dịch mũi như thế nào?",
+        "label": "Dịch mũi của bạn hiện tại như thế nào?",
         "options": ["Không có", "Trong, loãng", "Đặc, vàng/xanh"],
     },
     {
         "id": "giam_khuu_giac",
         "variable": "giam_khuu_giac",
         "type": "boolean",
-        "label": "Bạn có giảm hoặc mất khứu giác không?",
+        "label": "Bạn có cảm giác ngửi kém hoặc mất mùi so với bình thường không?",
     },
-    # Double-worsening (IDSA criterion)
+    # 4) Diễn tiến bệnh - giúp tách virus/vi khuẩn
     {
         "id": "trieu_chung_nang_len_sau_5_ngay",
         "variable": "trieu_chung_nang_len_sau_5_ngay",
         "type": "boolean",
-        "label": "Sau khi đỡ hơn vài ngày, triệu chứng có nặng lên lại sau 5–7 ngày không?",
+        "label": "Sau vài ngày đầu có vẻ đỡ, triệu chứng của bạn có nặng lên lại sau khoảng 5–7 ngày không?",
     },
-    # Temperature and supportive
+    # 5) Nhiệt độ và triệu chứng hỗ trợ
     {
         "id": "nhiet_do",
         "variable": "nhiet_do",
         "type": "number",
-        "label": "Nhiệt độ cơ thể hiện tại của bạn là bao nhiêu (°C)?",
+        "label": "Nhiệt độ cơ thể gần nhất bạn đo được là bao nhiêu °C?",
         "min": 35,
         "max": 43,
         "step": 0.1,
@@ -158,38 +159,38 @@ INTERVIEW_QUESTIONS: List[Dict[str, Any]] = [
         "id": "ho",
         "variable": "ho",
         "type": "boolean",
-        "label": "Bạn có ho (đặc biệt về đêm) không?",
+        "label": "Bạn có ho (đặc biệt ho nhiều về đêm) không?",
     },
     {
         "id": "hoi_mieng",
         "variable": "hoi_mieng",
         "type": "boolean",
-        "label": "Bạn có hơi thở có mùi hôi không?",
+        "label": "Bạn hoặc người xung quanh có cảm nhận hơi thở của bạn có mùi hôi khó chịu không?",
     },
-    # Risk factors
+    # 6) Yếu tố nguy cơ và nền bệnh - chỉ hỏi những yếu tố có ý nghĩa trong luật
     {
         "id": "co_di_ung",
         "variable": "co_di_ung",
         "type": "boolean",
-        "label": "Bạn có tiền sử viêm mũi dị ứng không?",
+        "label": "Bạn có tiền sử viêm mũi dị ứng hoặc dễ dị ứng với bụi/phấn hoa/khói... không?",
     },
     {
         "id": "co_hen_suyen",
         "variable": "co_hen_suyen",
         "type": "boolean",
-        "label": "Bạn có tiền sử hen suyễn không?",
+        "label": "Bạn có được chẩn đoán hen suyễn trước đây không?",
     },
     {
         "id": "co_polyp_mui",
         "variable": "co_polyp_mui",
         "type": "boolean",
-        "label": "Bạn có tiền sử polyp mũi không?",
+        "label": "Bạn đã từng được bác sĩ báo là có polyp mũi hoặc đã phẫu thuật polyp mũi chưa?",
     },
     {
         "id": "suy_giam_mien_dich",
         "variable": "suy_giam_mien_dich",
         "type": "boolean",
-        "label": "Bạn có tình trạng suy giảm miễn dịch (tiểu đường, HIV, dùng corticoid...) không?",
+        "label": "Hiện tại bạn có đang trong tình trạng suy giảm miễn dịch (tiểu đường khó kiểm soát, HIV, dùng corticoid kéo dài, hóa trị, v.v.) không?",
     },
 ]
 
@@ -233,30 +234,30 @@ def _get_question_for_fact(fact: str) -> Dict[str, Any] | None:
 def _choose_next_question_dynamic(
     kb: Any, answers: Dict[str, Any]
 ) -> Dict[str, Any] | None:
-    """Choose next question by inspecting rules' missing premises.
+    """Chọn câu hỏi tiếp theo theo kiểu 'ít nhưng trúng'.
 
-    Strategy:
-    - Compute known facts from current answers (including derived facts)
-    - For rules that conclude target diseases, collect missing premises of rules that are partially satisfied
-    - Ask for the most frequent missing premise across such rules, mapped to a concrete question
-    - Fallback to the static ordered list
+    Chiến lược:
+    - Luôn ưu tiên phát hiện sớm red flags và các chẩn đoán nguy hiểm.
+    - Chỉ hỏi những fact còn thiếu của các luật đang 'gần được kích hoạt' (partially satisfied).
+    - Bỏ qua các câu hỏi không còn ảnh hưởng đến chẩn đoán ưu tiên.
+    - Nếu KB không gợi ý được gì thêm, fallback sang danh sách tĩnh tối giản.
     """
-    # If this is the very first step, ask the most informative global question
-    # to branch the flow early (time is pivotal for virus/bacteria/chronic).
+    # Bước 1: nếu chưa có câu nào -> hỏi thời gian (trục phân loại chính)
     if not answers:
         for q in INTERVIEW_QUESTIONS:
             if q.get("variable") == "thoi_gian_trieu_chung":
                 return q
 
     if extract_facts_from_form is None:
-        return _choose_next_question(answers)
+        return _choose_next_question(current_answers=answers)
 
+    # Bước 2: tính các facts đã biết từ câu trả lời hiện tại
     try:
         known_facts = set(extract_facts_from_form(answers, kb))
     except Exception:
         known_facts = set()
 
-    # Target conclusions (diagnosis goals)
+    # Mục tiêu chẩn đoán cần quan tâm
     target_conclusions = {
         "nguy_co_bien_chung",
         "viem_xoang_do_nam",
@@ -266,34 +267,43 @@ def _choose_next_question_dynamic(
         "viem_xoang_cap",
     }
 
+    # Bước 3: duyệt rules để tìm những premises còn thiếu nhưng quan trọng
     missing_facts: Dict[str, int] = {}
     for rule in kb.data.get("rules", []):
         conclusion = rule.get("conclusion")
         if conclusion not in target_conclusions:
+            # Không dùng các rule ngoài mục tiêu chính để quyết định câu hỏi
             continue
+
         premises = set(rule.get("premises", []))
         if not premises:
             continue
+
         missing = premises - known_facts
-        # Consider only rules that are partially satisfied
+
+        # Chỉ quan tâm:
+        # - ĐÃ có ít nhất 1 tiền đề đúng (rule đang "gần bắn")
+        # - CÒN thiếu nhưng không phải thiếu toàn bộ
         if 0 < len(missing) < len(premises):
             for fact in missing:
                 missing_facts[fact] = missing_facts.get(fact, 0) + 1
 
+    # Bước 4: nếu có các fact thiếu quan trọng -> chọn fact xuất hiện nhiều nhất
     if missing_facts:
-        # Pick the most impactful missing fact first
+        # Lấy fact có tần suất cao nhất (ảnh hưởng nhiều rule nhất)
         fact = max(missing_facts.items(), key=lambda kv: kv[1])[0]
         q = _get_question_for_fact(fact)
         if q:
-            # If this question wasn't answered, ask it
+            # Chỉ hỏi nếu user chưa trả lời biến này
             if q["variable"] not in answers or answers.get(q["variable"]) in (None, ""):
-                # Ensure radio options included when needed
+                # Đảm bảo có options cho radio nếu cần
                 if q.get("type") == "radio" and "options" not in q:
                     q = {**q, "options": ["Không có", "Trong, loãng", "Đặc, vàng/xanh"]}
                 return q
 
-    # Fallback to the original ordered questions
-    return _choose_next_question(answers)
+    # Bước 5: nếu không còn fact quan trọng cần hỏi:
+    # dùng fallback tối giản (theo thứ tự đã được rút gọn trong INTERVIEW_QUESTIONS)
+    return _choose_next_question(current_answers=answers)
 
 
 def _try_early_stop(kb: Any, answers: Dict[str, Any]) -> Dict[str, Any] | None:

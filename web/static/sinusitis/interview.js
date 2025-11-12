@@ -78,16 +78,22 @@
             body: JSON.stringify({ answers })
         });
         const data = await res.json();
-        if (!data.ok) { appendBot('Xin lỗi, không đủ thông tin để chẩn đoán.'); return; }
+
+        if (!data.ok) {
+            appendBot('Xin lỗi, hiện tại hệ thống chưa đủ dữ liệu để đưa ra nhận định an toàn. Bạn nên trao đổi trực tiếp với bác sĩ để được thăm khám đầy đủ hơn.');
+            return;
+        }
+
         if (data.done) {
-            appendBot(`Xong rồi nhé. Kết luận sơ bộ: <strong>${data.summary.label}</strong>.`);
+            appendBot(`Dựa trên các thông tin bạn cung cấp, mình đã tổng hợp được một kết luận sơ bộ: <strong>${data.summary.label}</strong>.`);
             const el = document.createElement('div');
             el.className = 'mt-4';
-            el.innerHTML = `<a href="${data.result_url}" class="px-6 py-3 bg-cyan-600 text-white rounded-lg font-semibold hover:bg-cyan-700">Xem báo cáo chi tiết</a>`;
+            el.innerHTML = `<a href="${data.result_url}" class="px-6 py-3 bg-cyan-600 text-white rounded-lg font-semibold hover:bg-cyan-700">Xem giải thích chi tiết và khuyến nghị như bác sĩ tư vấn</a>`;
             controls.innerHTML = '';
             controls.appendChild(el);
             return;
         }
+
         appendBot(data.question.label);
         renderControls(data.question);
     }
@@ -98,6 +104,6 @@
         fetchNext();
     }
 
-    // Start the interview
+    // Bắt đầu phỏng vấn giống quy trình bác sĩ: hỏi từng ý quan trọng, không lan man
     fetchNext();
 })();
