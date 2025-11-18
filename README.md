@@ -30,26 +30,26 @@ Giao diện dành cho nhà phát triển/nhà nghiên cứu để thao tác tr�
 - 📐 **16 luật tam giác**: Tính cạnh, góc, diện tích
 - ✏️ **Custom rules**: Nhập luật tùy chỉnh để test
 
-### 🏥 Sinusitis Diagnosis - Hệ thống Chẩn đoán Viêm Xoang (MỚI)
+### 🏥 Sinusitis Diagnosis - Hệ thống Chẩn đoán Viêm Xoang
 
-Giao diện cho người dùng cuối, tập trung chuyên sâu vào một bệnh duy nhất: Viêm xoang.
+Kinh nghiệm phỏng vấn kiểu bác sĩ gia đình, chuyên sâu vào viêm xoang cấp/mạn.
 
 #### Knowledge Base (KB)
-- 📚 45+ luật suy diễn trong `data/sinusitis_kb.json`
-- � Phân loại: viêm xoang cấp (virus/vi khuẩn), mạn tính (có/không polyp), viêm xoang do nấm
-- 🩺 Triệu chứng: nhóm chính (đau vùng mặt, nghẹt mũi, dịch mũi đặc, giảm khứu giác), nhóm phụ và red-flags
-- 🧪 Fact mapping: Quy tắc suy diễn fact từ form (fact_rules) cho điều kiện số liệu như nhiệt độ, thời gian bệnh
+- 📚 54 luật, 31 triệu chứng, 8 loại bệnh trong `data/sinusitis_kb.json`
+- 🧠 Bao phủ: viêm xoang cấp do virus/vi khuẩn, viêm xoang cấp tái phát, viêm xoang mạn/polyp, nhiễm nấm và tình huống không phải viêm xoang
+- 🩺 Triệu chứng phân nhóm rõ: major, minor, pattern, duration, risk factor, history, red flag
+- 🧪 Fact mapping sinh thêm các fact dẫn xuất (ví dụ `co_bang_chung_thoi_gian_cap`, `dieu_kien_cap_day_du`) giúp luật cấp tính chỉ kích hoạt khi đủ bằng chứng
 
 #### Suy diễn & Kết quả
-- 🔗 Thuần suy diễn tiến (Forward Chaining) – KHÔNG dùng tính điểm hay AI scoring
-- � Chẩn đoán theo mức ưu tiên: biến chứng > nấm > vi khuẩn > mạn > virus > cấp
-- � Trả về khuyến nghị điều trị/khám phù hợp theo loại viêm xoang
-- 📈 Tùy chọn xuất đồ thị FPG/RPG nếu hệ thống có Graphviz
+- 🔗 Thuần Forward Chaining, không dùng scoring
+- ⚖️ Ưu tiên kết luận: biến chứng > nấm > vi khuẩn > tái phát > mạn tính > virus > cấp chung > không phải viêm xoang
+- 📝 Khuyến nghị dạng template có `@summary`, `@drivers`, `@home_care`, `@medical_visit`, `@follow_up`, `@emergency`; UI sẽ chia thành thẻ rõ ràng
+- 📈 Có thể bật xuất đồ thị FPG/RPG nếu Graphviz sẵn sàng
 
 #### Giao diện người dùng
-- 🧙 Wizard 4 bước (thông tin cơ bản → triệu chứng chính → triệu chứng phụ/yếu tố nguy cơ → red flags)
-- 🎨 TailwindCSS (theme xanh-cam) + JS thuần (`web/static/sinusitis/sinusitis.js`)
-- � Trang kết quả có: kết luận, severity, luật đã kích hoạt, khuyến nghị, và đồ thị (nếu có)
+- 🧑‍⚕️ Interview động: hệ thống chọn câu hỏi tiếp theo dựa trên các rule chưa đủ fact, ưu tiên red-flag và thông tin chẩn đoán quan trọng; có cơ chế early-stop nếu đã đủ dữ kiện
+- 🎨 TailwindCSS + JS thuần (`web/static/sinusitis/interview.js`) mô phỏng hội thoại bác sĩ; hỗ trợ radio/checkbox/number
+- 📑 Trang kết quả hiển thị bệnh lý, mức độ nặng, danh sách fact thu được, các luật đã kích hoạt (kèm module) và khuyến nghị chia thẻ (bao gồm phần Follow-up mới)
 
 Đường dẫn: http://127.0.0.1:5000/sinusitis
 
@@ -242,10 +242,10 @@ python run.py
 ### 🏥 Sinusitis Diagnosis
 
 1. Truy cập http://127.0.0.1:5000/sinusitis
-2. Click **"Bắt đầu Chẩn đoán"**
-3. Điền wizard 4 bước (ngày bệnh, nhiệt độ, triệu chứng mũi/xoang, yếu tố nguy cơ, red-flags)
-4. Submit để hệ thống chạy suy diễn tiến
-5. Xem kết quả: Loại viêm xoang (nếu có), severity, luật được kích hoạt, khuyến nghị, và đồ thị (nếu bật Graphviz)
+2. Bắt đầu phỏng vấn dạng hội thoại; trả lời từng câu hỏi, hệ thống sẽ tự chọn câu tiếp theo dựa trên dữ liệu đã có
+3. Các câu quan trọng (thời gian bệnh, dịch mũi, double-worsening, tái phát, red flag) luôn được ưu tiên
+4. Khi đủ dữ kiện, engine tự động dừng hỏi và trả kết quả forward-chaining
+5. Trang kết quả giải thích bệnh lý, liệt kê fact/fired rule, và render khuyến nghị đầy đủ (home care, khám, follow-up, emergency)
 
 ---
 
@@ -254,11 +254,15 @@ python run.py
 ### Automated Tests
 
 ```bash
-# Chạy toàn bộ bộ test tích hợp Medical Diagnosis
+# Chạy toàn bộ test medical legacy
 pytest tests/test_medical_diagnosis.py
+
+# Chạy bộ kiểm thử viêm xoang chuyên sâu
+pytest tests/test_sinusitis_inference.py
 ```
 
-Các bài test này gửi payload giả lập tới `/medical/api/diagnose` để đảm bảo kết quả trả về ổn định:
+Các bài test viêm xoang mô phỏng 14 hồ sơ bệnh nhân (virus, vi khuẩn, mạn, tái phát, nấm, biến chứng...) và xác nhận mỗi kịch bản kích hoạt đúng facts + recommendation markers.
+Các bài test medical legacy gửi payload giả lập tới `/medical/api/diagnose` để đảm bảo kết quả trả về ổn định:
 
 - **test_severe_upper_respiratory_symptoms_surface_pharyngitis**: xác nhận triệu chứng hô hấp nặng ưu tiên chẩn đoán `viem_hong` với độ tin cậy đủ cao.
 - **test_digestive_symptoms_rank_food_poisoning_or_gastritis_highest**: đảm bảo triệu chứng đường tiêu hoá ưu tiên `ngo_doc_thuc_pham`/`viem_da_day`.

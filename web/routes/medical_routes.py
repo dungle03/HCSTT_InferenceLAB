@@ -192,6 +192,12 @@ INTERVIEW_QUESTIONS: List[Dict[str, Any]] = [
         "type": "boolean",
         "label": "Hiện tại bạn có đang trong tình trạng suy giảm miễn dịch (tiểu đường khó kiểm soát, HIV, dùng corticoid kéo dài, hóa trị, v.v.) không?",
     },
+    {
+        "id": "tai_phat_nhieu_lan",
+        "variable": "tai_phat_nhieu_lan",
+        "type": "boolean",
+        "label": "Trong 12 tháng qua bạn có ít nhất 4 đợt viêm xoang cấp cần điều trị y tế không?",
+    },
 ]
 
 
@@ -222,6 +228,9 @@ def _get_question_for_fact(fact: str) -> Dict[str, Any] | None:
         "chay_mui_dac": "loai_dich_mui",
         # Face pain aggregates → ask a concrete site first
         "dau_nang_mat": "dau_vung_xoang_ham",
+        "co_bang_chung_thoi_gian_cap": "thoi_gian_trieu_chung",
+        "co_bang_chung_dich_cap": "loai_dich_mui",
+        "dieu_kien_cap_day_du": "loai_dich_mui",
     }
     var = derived_map.get(fact)
     if var:
@@ -262,6 +271,7 @@ def _choose_next_question_dynamic(
         "nguy_co_bien_chung",
         "viem_xoang_do_nam",
         "viem_xoang_cap_do_vi_khuan",
+        "viem_xoang_tai_phat",
         "viem_xoang_man_tinh",
         "viem_xoang_cap_do_virus",
         "viem_xoang_cap",
@@ -331,6 +341,7 @@ def _try_early_stop(kb: Any, answers: Dict[str, Any]) -> Dict[str, Any] | None:
             "nguy_co_bien_chung",
             "viem_xoang_do_nam",
             "viem_xoang_cap_do_vi_khuan",
+            "viem_xoang_tai_phat",
             "viem_xoang_man_tinh",
             "viem_xoang_cap_do_virus",
             "viem_xoang_cap",
@@ -550,6 +561,7 @@ def api_next_question():
             "nguy_co_bien_chung",
             "viem_xoang_do_nam",
             "viem_xoang_cap_do_vi_khuan",
+            "viem_xoang_tai_phat",
             "viem_xoang_man_tinh",
             "viem_xoang_cap_do_virus",
             "viem_xoang_cap",
@@ -649,32 +661,91 @@ def results(session_id: str):
     ]
 
     fired_rules = result_data.get("inference", {}).get("fired_rules", [])
+    final_facts = set(result_data.get("inference", {}).get("final_facts", []))
+    patient_facts = set(input_facts_raw)
 
     # Lấy giải thích cho các luật đã được kích hoạt
     rule_explanations = []
 
-    def _allowed_modules_for(disease: str) -> set:
+    def _allowed_modules_for(disease_code: str | None) -> set:
         mapping = {
-            "nguy_co_bien_chung": {"COMPLICATIONS"},
+            "nguy_co_bien_chung": {"COMPLICATIONS", "ACUTE_DIAGNOSIS", "ACUTE_CONTEXT"},
             "viem_xoang_do_nam": {"FUNGAL_DIAGNOSIS", "CHRONIC_DIAGNOSIS"},
-            "viem_xoang_cap_do_vi_khuan": {"ACUTE_DIAGNOSIS", "ACUTE_ETIOLOGY"},
+            "viem_xoang_cap_do_vi_khuan": {
+                "ACUTE_DIAGNOSIS",
+                "ACUTE_ETIOLOGY",
+                "ACUTE_CONTEXT",
+            },
             "viem_xoang_man_tinh": {"CHRONIC_DIAGNOSIS"},
-            "viem_xoang_cap_do_virus": {"ACUTE_DIAGNOSIS", "ACUTE_ETIOLOGY"},
-            "viem_xoang_cap": {"ACUTE_DIAGNOSIS"},
+            "viem_xoang_cap_do_virus": {
+                "ACUTE_DIAGNOSIS",
+                "ACUTE_ETIOLOGY",
+                "ACUTE_CONTEXT",
+            },
+            "viem_xoang_cap": {"ACUTE_DIAGNOSIS", "ACUTE_CONTEXT"},
+            "viem_xoang_tai_phat": {
+                "ACUTE_DIAGNOSIS",
+                "ACUTE_CONTEXT",
+                "RECURRENT_ACUTE",
+            },
             "khong_phai_viem_xoang": {"DIFFERENTIAL"},
         }
-        return mapping.get(diagnosis.get("disease", ""), set())
+        return mapping.get(disease_code or "", set())
 
     if kb:
-        allowed_modules = _allowed_modules_for(diagnosis)
+        allowed_modules = _allowed_modules_for(diagnosis.get("disease"))
+        module_labels = {
+            "ACUTE_DIAGNOSIS": "Chẩn đoán viêm xoang cấp",
+            "ACUTE_ETIOLOGY": "Phân loại nguyên nhân cấp",
+            "CHRONIC_DIAGNOSIS": "Chẩn đoán viêm xoang mạn",
+            "FUNGAL_DIAGNOSIS": "Tầm soát nấm",
+            "COMPLICATIONS": "Cảnh báo biến chứng",
+            "DIFFERENTIAL": "Chẩn đoán phân biệt",
+            "ACUTE_CONTEXT": "Điều kiện bổ trợ viêm xoang cấp",
+            "RECURRENT_ACUTE": "Đánh giá viêm xoang tái phát",
+        }
+        disease_goal_set = {item.get("variable") for item in kb.get_diseases()}
         for rule_id in fired_rules:
             rule_info = kb.get_rule_info(rule_id)
             if not rule_info:
                 continue
             if allowed_modules and rule_info.get("module") not in allowed_modules:
                 continue
-            if rule_info.get("notes"):
-                rule_explanations.append(f"[{rule_id}] {rule_info['notes']}")
+            premises = []
+            for atom in rule_info.get("premises", []):
+                premises.append(
+                    {
+                        "code": atom,
+                        "label": kb.get_symptom_label(atom),
+                        "satisfied": atom in final_facts,
+                        "source": "patient" if atom in patient_facts else "inferred",
+                    }
+                )
+
+            conclusion_code = rule_info.get("conclusion")
+            conclusion_label = kb.get_symptom_label(conclusion_code)
+            disease_info = kb.get_disease_info(conclusion_code)
+            if disease_info and disease_info.get("label"):
+                conclusion_label = disease_info["label"]
+
+            rule_explanations.append(
+                {
+                    "rule_id": rule_info.get("json_id") or f"Rule {rule_id}",
+                    "engine_id": rule_id,
+                    "module": rule_info.get("module"),
+                    "module_label": module_labels.get(
+                        rule_info.get("module"), rule_info.get("module")
+                    ),
+                    "notes": rule_info.get("notes"),
+                    "premises": premises,
+                    "conclusion": {
+                        "code": conclusion_code,
+                        "label": conclusion_label,
+                        "is_goal": conclusion_code in disease_goal_set,
+                    },
+                    "confidence": rule_info.get("confidence"),
+                }
+            )
 
     return render_template(
         "results.html",

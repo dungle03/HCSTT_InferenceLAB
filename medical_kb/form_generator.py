@@ -174,6 +174,10 @@ def extract_facts_from_form(form_data: Dict[str, Any], kb: Any) -> Set[str]:
     # Map 'loai_dich_mui' radio to chay_mui_trong / chay_mui_dac
     muc_dich = _norm(form_data.get("loai_dich_mui"))
     if muc_dich:
+        if any(key in muc_dich for key in ["không", "khong", "none", "khong co"]):
+            facts.add("khong_co_dich_mui")
+        else:
+            facts.add("co_dich_mui")
         if "trong" in muc_dich:
             facts.add("chay_mui_trong")
         if any(key in muc_dich for key in ["đặc", "dac", "vàng", "vang", "xanh"]):

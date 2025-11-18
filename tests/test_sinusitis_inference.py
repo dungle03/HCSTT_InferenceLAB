@@ -78,7 +78,13 @@ SCENARIOS = [
                 "giam_khuu_giac": True,
                 "nhiet_do": 37.8,
             },
-            "expected_facts": {"viem_xoang_cap", "viem_xoang_cap_do_virus"},
+            "expected_facts": {
+                "viem_xoang_cap",
+                "viem_xoang_cap_do_virus",
+                "co_bang_chung_thoi_gian_cap",
+                "co_bang_chung_dich_cap",
+                "dieu_kien_cap_day_du",
+            },
             "expected_severity": "Mild",
         },
         id="acute-virus",
@@ -96,10 +102,39 @@ SCENARIOS = [
                 "nhiet_do": 38.9,
                 "trieu_chung_nang_len_sau_5_ngay": True,
             },
-            "expected_facts": {"viem_xoang_cap", "viem_xoang_cap_do_vi_khuan"},
+            "expected_facts": {
+                "viem_xoang_cap",
+                "viem_xoang_cap_do_vi_khuan",
+                "co_bang_chung_thoi_gian_cap",
+                "co_bang_chung_dich_cap",
+                "dieu_kien_cap_day_du",
+            },
             "expected_severity": "Moderate",
         },
         id="acute-bacteria",
+    ),
+    pytest.param(
+        {
+            "disease": "viem_xoang_tai_phat",
+            "answers": {
+                "thoi_gian_trieu_chung": 9,
+                "nghet_mui": True,
+                "loai_dich_mui": "Đặc, vàng/xanh",
+                "dau_vung_xoang_ham": True,
+                "dau_nang_mat": True,
+                "giam_khuu_giac": True,
+                "tai_phat_nhieu_lan": True,
+            },
+            "expected_facts": {
+                "viem_xoang_cap",
+                "viem_xoang_tai_phat",
+                "co_bang_chung_thoi_gian_cap",
+                "co_bang_chung_dich_cap",
+                "dieu_kien_cap_day_du",
+            },
+            "expected_severity": "Moderate",
+        },
+        id="recurrent",
     ),
     pytest.param(
         {
@@ -140,11 +175,18 @@ SCENARIOS = [
                 "nghet_mui": True,
                 "dau_vung_xoang_ham": True,
                 "dau_nang_mat": True,
+                "loai_dich_mui": "Đặc, vàng/xanh",
                 "nhiet_do": 39.7,
                 "dau_dau_du_doi": True,
                 "sung_quanh_mat": True,
             },
-            "expected_facts": {"viem_xoang_cap", "nguy_co_bien_chung"},
+            "expected_facts": {
+                "viem_xoang_cap",
+                "nguy_co_bien_chung",
+                "co_bang_chung_thoi_gian_cap",
+                "co_bang_chung_dich_cap",
+                "dieu_kien_cap_day_du",
+            },
             "expected_severity": "Critical",
         },
         id="complication",
@@ -185,6 +227,7 @@ def test_forward_inference_matches_medical_expectation(
         "viem_xoang_cap_do_virus",
         "viem_xoang_cap_do_vi_khuan",
         "viem_xoang_cap",
+    "viem_xoang_tai_phat",
         "viem_xoang_man_tinh",
         "viem_xoang_do_nam",
         "nguy_co_bien_chung",
@@ -201,6 +244,12 @@ def test_recommendations_remain_structured(
     assert recommendation.startswith(
         "@summary:"
     ), f"Missing @summary header for {disease}"
-    required_markers = ["@summary:", "@home_care:", "@medical_visit:", "@emergency:"]
+    required_markers = [
+        "@summary:",
+        "@home_care:",
+        "@medical_visit:",
+        "@follow_up:",
+        "@emergency:",
+    ]
     for marker in required_markers:
         assert marker in recommendation, f"Marker {marker} absent for {disease}"

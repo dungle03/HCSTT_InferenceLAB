@@ -3,9 +3,9 @@
   "last_updated": "2025-10-29T10:00:00.000000",
   "description": "Cơ sở tri thức chuyên sâu về chẩn đoán Viêm Xoang (Sinusitis)",
   "metadata": {
-    "total_rules": 48,
-    "total_symptoms": 25,
-    "total_diseases": 7,
+    "total_rules": 54,
+    "total_symptoms": 31,
+    "total_diseases": 8,
     "sources": [
       "Vinmec",
       "Mayo Clinic",
@@ -162,6 +162,42 @@
       "variable": "cung_gay",
       "label": "Cứng gáy",
       "category": "red_flag"
+    },
+    {
+      "id": "S126",
+      "variable": "tai_phat_nhieu_lan",
+      "label": "Từng bị viêm xoang cấp ≥ 4 lần/năm",
+      "category": "history"
+    },
+    {
+      "id": "S127",
+      "variable": "co_dich_mui",
+      "label": "Có ghi nhận dịch mũi bất thường",
+      "category": "derived"
+    },
+    {
+      "id": "S128",
+      "variable": "khong_co_dich_mui",
+      "label": "Không ghi nhận dịch mũi bất thường",
+      "category": "derived"
+    },
+    {
+      "id": "S129",
+      "variable": "co_bang_chung_thoi_gian_cap",
+      "label": "Đã có dữ kiện thời gian phù hợp viêm xoang cấp",
+      "category": "derived"
+    },
+    {
+      "id": "S130",
+      "variable": "co_bang_chung_dich_cap",
+      "label": "Đã có dữ kiện tính chất dịch phù hợp viêm xoang cấp",
+      "category": "derived"
+    },
+    {
+      "id": "S131",
+      "variable": "dieu_kien_cap_day_du",
+      "label": "Đủ điều kiện phụ để chẩn đoán viêm xoang cấp",
+      "category": "derived"
     }
   ],
   "diseases": [
@@ -206,6 +242,12 @@
       "variable": "nguy_co_bien_chung",
       "label": "Nguy cơ biến chứng - Cần khám khẩn cấp",
       "severity": "Critical"
+    },
+    {
+      "id": "D108",
+      "variable": "viem_xoang_tai_phat",
+      "label": "Viêm xoang cấp tái phát",
+      "severity": "Moderate"
     }
   ],
   "rules": [
@@ -214,7 +256,8 @@
       "module": "ACUTE_DIAGNOSIS",
       "premises": [
         "nghet_mui",
-        "dau_nang_mat"
+        "dau_nang_mat",
+        "dieu_kien_cap_day_du"
       ],
       "conclusion": "viem_xoang_cap",
       "confidence": 0.8,
@@ -225,7 +268,8 @@
       "module": "ACUTE_DIAGNOSIS",
       "premises": [
         "nghet_mui",
-        "chay_mui_dac"
+        "chay_mui_dac",
+        "dieu_kien_cap_day_du"
       ],
       "conclusion": "viem_xoang_cap",
       "confidence": 0.8,
@@ -236,7 +280,8 @@
       "module": "ACUTE_DIAGNOSIS",
       "premises": [
         "dau_nang_mat",
-        "chay_mui_dac"
+        "chay_mui_dac",
+        "dieu_kien_cap_day_du"
       ],
       "conclusion": "viem_xoang_cap",
       "confidence": 0.8,
@@ -247,7 +292,8 @@
       "module": "ACUTE_DIAGNOSIS",
       "premises": [
         "nghet_mui",
-        "giam_khuu_giac"
+        "giam_khuu_giac",
+        "dieu_kien_cap_day_du"
       ],
       "conclusion": "viem_xoang_cap",
       "confidence": 0.75,
@@ -264,6 +310,67 @@
       "conclusion": "viem_xoang_cap_day_du_trieu_chung",
       "confidence": 0.9,
       "notes": "Xác nhận VXC với các triệu chứng phụ."
+    },
+    {
+      "id": "VXC_TIME_01",
+      "module": "ACUTE_CONTEXT",
+      "premises": [
+        "trieu_chung_duoi_10_ngay"
+      ],
+      "conclusion": "co_bang_chung_thoi_gian_cap",
+      "confidence": 0.85,
+      "notes": "Triệu chứng kéo dài dưới 10 ngày phù hợp viêm xoang cấp."
+    },
+    {
+      "id": "VXC_TIME_02",
+      "module": "ACUTE_CONTEXT",
+      "premises": [
+        "trieu_chung_tren_10_ngay"
+      ],
+      "conclusion": "co_bang_chung_thoi_gian_cap",
+      "confidence": 0.85,
+      "notes": "Triệu chứng kéo dài trên 10 ngày nhưng chưa tới 12 tuần vẫn thuộc nhóm cấp tính kéo dài."
+    },
+    {
+      "id": "VXC_DISCHARGE_01",
+      "module": "ACUTE_CONTEXT",
+      "premises": [
+        "chay_mui_trong"
+      ],
+      "conclusion": "co_bang_chung_dich_cap",
+      "confidence": 0.8,
+      "notes": "Dịch mũi trong/loãng vẫn là dấu hiệu của viêm xoang cấp nhẹ."
+    },
+    {
+      "id": "VXC_DISCHARGE_02",
+      "module": "ACUTE_CONTEXT",
+      "premises": [
+        "chay_mui_dac"
+      ],
+      "conclusion": "co_bang_chung_dich_cap",
+      "confidence": 0.9,
+      "notes": "Dịch mũi đặc, vàng/xanh củng cố chẩn đoán viêm xoang cấp."
+    },
+    {
+      "id": "VXC_DISCHARGE_03",
+      "module": "ACUTE_CONTEXT",
+      "premises": [
+        "co_dich_mui"
+      ],
+      "conclusion": "co_bang_chung_dich_cap",
+      "confidence": 0.75,
+      "notes": "Có ghi nhận dịch mũi bất thường hỗ trợ đánh giá viêm xoang cấp."
+    },
+    {
+      "id": "VXC_CONTEXT_GATE",
+      "module": "ACUTE_CONTEXT",
+      "premises": [
+        "co_bang_chung_thoi_gian_cap",
+        "co_bang_chung_dich_cap"
+      ],
+      "conclusion": "dieu_kien_cap_day_du",
+      "confidence": 0.95,
+      "notes": "Chỉ khi có đủ thời gian và tính chất dịch mũi mới cho phép kích hoạt các luật viêm xoang cấp."
     },
     {
       "id": "VXC_VIRUS_01",
@@ -323,6 +430,18 @@
       "conclusion": "viem_xoang_cap_do_vi_khuan",
       "confidence": 0.85,
       "notes": "Tổ hợp triệu chứng nặng (sốt, mủ, đau) -> nghi ngờ vi khuẩn."
+    },
+    {
+      "id": "VXC_REC_01",
+      "module": "RECURRENT_ACUTE",
+      "premises": [
+        "viem_xoang_cap",
+        "tai_phat_nhieu_lan",
+        "co_bang_chung_thoi_gian_cap"
+      ],
+      "conclusion": "viem_xoang_tai_phat",
+      "confidence": 0.92,
+      "notes": "Viêm xoang cấp tái phát: ≥4 đợt/năm, mỗi đợt < 4 tuần và cần điều trị bằng kháng sinh."
     },
     {
       "id": "VXM_01",
@@ -600,6 +719,12 @@
             "default": 37.0
           },
           {
+            "id": "trieu_chung_nang_len_sau_5_ngay",
+            "variable": "trieu_chung_nang_len_sau_5_ngay",
+            "label": "Sau vài ngày đầu đã đỡ, triệu chứng có nặng lên trở lại sau 5-7 ngày không?",
+            "type": "boolean"
+          },
+          {
             "id": "ho",
             "variable": "ho",
             "label": "Ho",
@@ -640,6 +765,12 @@
             "variable": "suy_giam_mien_dich",
             "label": "Đang có tình trạng suy giảm miễn dịch (tiểu đường, HIV, dùng corticoid...)",
             "type": "boolean"
+          },
+          {
+            "id": "tai_phat_nhieu_lan",
+            "variable": "tai_phat_nhieu_lan",
+            "label": "Trong 12 tháng qua bạn có ít nhất 4 đợt viêm xoang cấp phải điều trị?",
+            "type": "boolean"
           }
         ]
       },
@@ -677,37 +808,42 @@
   "recommendations": [
     {
       "condition": "viem_xoang_cap_do_virus",
-      "recommendation": "@summary:\n- Viêm xoang cấp do virus với mức độ Mild.\n- Triệu chứng thường kéo dài 5-10 ngày và tự giới hạn.\n@drivers:\n- Nghẹt mũi kèm chảy mũi trong hoặc loãng.\n- Chưa ghi nhận dấu hiệu bội nhiễm vi khuẩn như mủ vàng/xanh kéo dài hoặc sốt cao.\n@home_care:\n- Nghỉ ngơi, ngủ đủ giấc, uống 1.5-2 lít nước mỗi ngày nếu không có chống chỉ định.\n- Rửa mũi bằng nước muối 0.9% 2-3 lần/ngày, thao tác nhẹ nhàng.\n- Có thể xông hơi ấm nhẹ hoặc tắm nước ấm để giúp thông mũi.\n- Dùng Paracetamol đúng liều nếu đau đầu hoặc sốt.\n@medical_visit:\n- Đến khám bác sĩ nếu triệu chứng không giảm sau 7-10 ngày.\n- Tái khám sớm nếu bạn có hen, dị ứng nặng hoặc suy giảm miễn dịch.\n@emergency:\n- Cấp cứu khi sốt > 39°C, đau đầu dữ dội, nôn, cứng gáy hoặc lơ mơ.\n- Cấp cứu khi sưng đỏ quanh mắt hoặc nhìn mờ/nhìn đôi.\n@notes:\n- Tránh tự ý dùng kháng sinh vì virus không đáp ứng kháng sinh.\n- Giữ vệ sinh tay, che miệng khi ho để hạn chế lây lan.",
+      "recommendation": "@summary:\n- Viêm xoang cấp do virus với mức độ Mild.\n- Triệu chứng thường kéo dài 5-10 ngày và tự giới hạn.\n@drivers:\n- Nghẹt mũi kèm chảy mũi trong hoặc loãng.\n- Chưa ghi nhận dấu hiệu bội nhiễm vi khuẩn như mủ vàng/xanh kéo dài hoặc sốt cao.\n@home_care:\n- Nghỉ ngơi, ngủ đủ giấc, uống 1.5-2 lít nước mỗi ngày nếu không có chống chỉ định.\n- Rửa mũi bằng nước muối 0.9% 2-3 lần/ngày, thao tác nhẹ nhàng.\n- Có thể xông hơi ấm nhẹ hoặc tắm nước ấm để giúp thông mũi.\n- Dùng Paracetamol đúng liều nếu đau đầu hoặc sốt.\n@medical_visit:\n- Đến khám bác sĩ nếu triệu chứng không giảm sau 7-10 ngày.\n- Tái khám sớm nếu bạn có hen, dị ứng nặng hoặc suy giảm miễn dịch.\n@follow_up:\n- Ghi chú nhiệt độ và màu dịch mũi mỗi ngày; tái khám nếu sau 10 ngày không cải thiện.\n- Liên hệ bác sĩ ngay nếu xuất hiện sốt > 39°C, đau mặt tăng nhanh hoặc triệu chứng mới.\n@emergency:\n- Cấp cứu khi sốt > 39°C, đau đầu dữ dội, nôn, cứng gáy hoặc lơ mơ.\n- Cấp cứu khi sưng đỏ quanh mắt hoặc nhìn mờ/nhìn đôi.\n@notes:\n- Tránh tự ý dùng kháng sinh vì virus không đáp ứng kháng sinh.\n- Giữ vệ sinh tay, che miệng khi ho để hạn chế lây lan.",
       "priority": "Low"
     },
     {
       "condition": "viem_xoang_cap_do_vi_khuan",
-      "recommendation": "@summary:\n- Viêm xoang cấp do vi khuẩn với mức độ Moderate.\n- Triệu chứng kéo dài hơn 10 ngày hoặc nặng lên sau vài ngày đỡ.\n@drivers:\n- Nghẹt mũi kèm dịch đặc vàng/xanh và đau vùng mặt, đôi khi một bên.\n- Ghi nhận dấu hiệu dai dẳng hoặc sốt, gợi ý bội nhiễm vi khuẩn.\n@home_care:\n- Rửa mũi bằng nước muối 0.9% ngày 2-3 lần, thao tác nhẹ nhàng.\n- Uống đủ nước, giữ ấm cơ thể, tránh khói thuốc và môi trường ô nhiễm.\n- Dùng thuốc giảm đau/hạ sốt an toàn theo hướng dẫn khi cần.\n@medical_visit:\n- Đặt lịch khám Tai Mũi Họng sớm để đánh giá và chỉ định thuốc phù hợp.\n- Mang theo danh sách thuốc đã dùng và bệnh nền khi đi khám.\n@emergency:\n- Cấp cứu nếu sưng hoặc đau quanh mắt, nhìn mờ/nhìn đôi, đau đầu dữ dội, nôn, cổ cứng hoặc lơ mơ.\n- Đến cơ sở y tế ngay khi sốt > 39°C không hạ sau thuốc.\n@notes:\n- Không tự ý mua hoặc đổi kháng sinh để tránh kháng thuốc và che lấp triệu chứng.\n- Theo dõi triệu chứng mỗi ngày và tái khám nếu không cải thiện sau 48 giờ điều trị.",
+      "recommendation": "@summary:\n- Viêm xoang cấp do vi khuẩn với mức độ Moderate.\n- Triệu chứng kéo dài hơn 10 ngày hoặc nặng lên sau vài ngày đỡ.\n@drivers:\n- Nghẹt mũi kèm dịch đặc vàng/xanh và đau vùng mặt, đôi khi một bên.\n- Ghi nhận dấu hiệu dai dẳng hoặc sốt, gợi ý bội nhiễm vi khuẩn.\n@home_care:\n- Rửa mũi bằng nước muối 0.9% ngày 2-3 lần, thao tác nhẹ nhàng.\n- Uống đủ nước, giữ ấm cơ thể, tránh khói thuốc và môi trường ô nhiễm.\n- Dùng thuốc giảm đau/hạ sốt an toàn theo hướng dẫn khi cần.\n@medical_visit:\n- Đặt lịch khám Tai Mũi Họng sớm để đánh giá và chỉ định thuốc phù hợp.\n- Mang theo danh sách thuốc đã dùng và bệnh nền khi đi khám.\n@follow_up:\n- Tái khám sau 48-72 giờ nếu đã dùng kháng sinh mà triệu chứng không cải thiện.\n- Đến đánh giá lại sau 7-10 ngày để bác sĩ kiểm tra đáp ứng và tránh biến chứng.\n@emergency:\n- Cấp cứu nếu sưng hoặc đau quanh mắt, nhìn mờ/nhìn đôi, đau đầu dữ dội, nôn, cổ cứng hoặc lơ mơ.\n- Đến cơ sở y tế ngay khi sốt > 39°C không hạ sau thuốc.\n@notes:\n- Không tự ý mua hoặc đổi kháng sinh để tránh kháng thuốc và che lấp triệu chứng.\n- Theo dõi triệu chứng mỗi ngày và tái khám nếu không cải thiện sau 48 giờ điều trị.",
       "priority": "Medium"
     },
     {
       "condition": "viem_xoang_cap",
-      "recommendation": "@summary:\n- Viêm xoang cấp mức độ Moderate, chưa xác định rõ nguyên nhân.\n- Cần thêm dấu hiệu về thời gian và tính chất dịch mũi để phân biệt virus hay vi khuẩn.\n@drivers:\n- Tổ hợp nghẹt mũi, đau/ức vùng mặt và chảy mũi phù hợp viêm xoang cấp.\n- Chưa có đủ dữ liệu về diễn tiến hoặc dịch mũi để phân loại nguyên nhân.\n@home_care:\n- Nghỉ ngơi, giữ ấm, uống đủ nước, tránh thức khuya và làm việc quá sức.\n- Rửa hoặc xịt mũi bằng nước muối 0.9% 2-3 lần/ngày; giữ môi trường thông thoáng, tránh khói bụi.\n- Ăn uống lành mạnh, bổ sung rau xanh và vitamin C.\n@medical_visit:\n- Đặt lịch khám nếu không cải thiện sau 7-10 ngày hoặc tái phát nhiều lần.\n- Khi đi khám, chuẩn bị thông tin về thời gian triệu chứng, thuốc đã sử dụng và bệnh nền.\n@emergency:\n- Cấp cứu khi sưng đỏ quanh mắt, nhìn mờ/nhìn đôi, đau đầu dữ dội, nôn, cổ cứng hoặc lơ mơ.\n- Đến cơ sở y tế ngay nếu sốt > 39°C không hạ với thuốc thông thường.\n@notes:\n- Ghi lại nhiệt độ và màu dịch mũi mỗi ngày để cung cấp cho bác sĩ.\n- Tránh tự ý dùng kháng sinh khi chưa được chỉ định.",
+      "recommendation": "@summary:\n- Viêm xoang cấp mức độ Moderate, chưa xác định rõ nguyên nhân.\n- Cần thêm dấu hiệu về thời gian và tính chất dịch mũi để phân biệt virus hay vi khuẩn.\n@drivers:\n- Tổ hợp nghẹt mũi, đau/ức vùng mặt và chảy mũi phù hợp viêm xoang cấp.\n- Chưa có đủ dữ liệu về diễn tiến hoặc dịch mũi để phân loại nguyên nhân.\n@home_care:\n- Nghỉ ngơi, giữ ấm, uống đủ nước, tránh thức khuya và làm việc quá sức.\n- Rửa hoặc xịt mũi bằng nước muối 0.9% 2-3 lần/ngày; giữ môi trường thông thoáng, tránh khói bụi.\n- Ăn uống lành mạnh, bổ sung rau xanh và vitamin C.\n@medical_visit:\n- Đặt lịch khám nếu không cải thiện sau 7-10 ngày hoặc tái phát nhiều lần.\n- Khi đi khám, chuẩn bị thông tin về thời gian triệu chứng, thuốc đã sử dụng và bệnh nền.\n@follow_up:\n- Nếu triệu chứng tái phát trong vòng 3 tháng, cần tái khám để tầm soát nguyên nhân tiềm ẩn.\n- Ghi lại nhật ký triệu chứng để cung cấp cho bác sĩ trong lần tái khám.\n@emergency:\n- Cấp cứu khi sưng đỏ quanh mắt, nhìn mờ/nhìn đôi, đau đầu dữ dội, nôn, cổ cứng hoặc lơ mơ.\n- Đến cơ sở y tế ngay nếu sốt > 39°C không hạ với thuốc thông thường.\n@notes:\n- Ghi lại nhiệt độ và màu dịch mũi mỗi ngày để cung cấp cho bác sĩ.\n- Tránh tự ý dùng kháng sinh khi chưa được chỉ định.",
       "priority": "Medium"
     },
     {
       "condition": "viem_xoang_man_tinh",
-      "recommendation": "@summary:\n- Viêm xoang mạn tính mức độ Moderate, triệu chứng kéo dài >= 12 tuần.\n- Cần điều trị duy trì và kiểm soát các bệnh nền đi kèm.\n@drivers:\n- Nghẹt mũi, chảy mũi hoặc đau vùng mặt kéo dài nhiều tuần.\n- Có thể kèm cơ địa dị ứng, polyp mũi hoặc hen suyễn.\n@home_care:\n- Rửa mũi hằng ngày bằng dung dịch muối đẳng trương hoặc ưu trương.\n- Sử dụng thuốc xịt corticoid đúng kỹ thuật nếu đã được kê đơn.\n- Giữ môi trường sống sạch, tránh khói thuốc, bụi, nấm mốc.\n@medical_visit:\n- Khám Tai Mũi Họng để nội soi và cân nhắc chụp CT xoang.\n- Trao đổi với bác sĩ về kiểm soát dị ứng, hen, trào ngược dạ dày nếu có.\n- Tái khám đúng hẹn để điều chỉnh phác đồ và đánh giá đáp ứng.\n@emergency:\n- Cấp cứu khi đau mặt tăng nhanh, sốt cao, sưng quanh mắt hoặc nhìn mờ.\n- Báo bác sĩ ngay nếu khó thở hoặc mất khứu giác đột ngột.\n@notes:\n- Ghi nhật ký triệu chứng và việc dùng thuốc để theo dõi hiệu quả.\n- Tuân thủ điều trị; ngưng thuốc sớm làm bệnh dễ bùng phát trở lại.",
+      "recommendation": "@summary:\n- Viêm xoang mạn tính mức độ Moderate, triệu chứng kéo dài >= 12 tuần.\n- Cần điều trị duy trì và kiểm soát các bệnh nền đi kèm.\n@drivers:\n- Nghẹt mũi, chảy mũi hoặc đau vùng mặt kéo dài nhiều tuần.\n- Có thể kèm cơ địa dị ứng, polyp mũi hoặc hen suyễn.\n@home_care:\n- Rửa mũi hằng ngày bằng dung dịch muối đẳng trương hoặc ưu trương.\n- Sử dụng thuốc xịt corticoid đúng kỹ thuật nếu đã được kê đơn.\n- Giữ môi trường sống sạch, tránh khói thuốc, bụi, nấm mốc.\n@medical_visit:\n- Khám Tai Mũi Họng để nội soi và cân nhắc chụp CT xoang.\n- Trao đổi với bác sĩ về kiểm soát dị ứng, hen, trào ngược dạ dày nếu có.\n- Tái khám đúng hẹn để điều chỉnh phác đồ và đánh giá đáp ứng.\n@follow_up:\n- Đặt lịch tái khám định kỳ mỗi 3 tháng hoặc theo hướng dẫn của bác sĩ điều trị.\n- Tái đánh giá sớm hơn nếu triệu chứng tăng nặng hoặc xuất hiện polyp mới.\n@emergency:\n- Cấp cứu khi đau mặt tăng nhanh, sốt cao, sưng quanh mắt hoặc nhìn mờ.\n- Báo bác sĩ ngay nếu khó thở hoặc mất khứu giác đột ngột.\n@notes:\n- Ghi nhật ký triệu chứng và việc dùng thuốc để theo dõi hiệu quả.\n- Tuân thủ điều trị; ngưng thuốc sớm làm bệnh dễ bùng phát trở lại.",
       "priority": "High"
     },
     {
       "condition": "viem_xoang_do_nam",
-      "recommendation": "@summary:\n- Nghi ngờ viêm xoang do nấm với mức độ Severe.\n- Tình trạng này cần đánh giá chuyên khoa sớm, đặc biệt ở người suy giảm miễn dịch.\n@drivers:\n- Viêm xoang mạn kèm suy giảm miễn dịch hoặc polyp kéo dài.\n- Dịch mũi đặc, hôi hoặc đau mặt dai dẳng.\n@home_care:\n- Giữ vệ sinh mũi họng, rửa mũi đúng cách bằng nước muối sạch.\n- Tránh ngoáy mũi, hạn chế môi trường ẩm mốc, kiểm soát đường huyết tốt.\n- Chuẩn bị hồ sơ các thuốc đang dùng và bệnh nền để cung cấp cho bác sĩ.\n@medical_visit:\n- Đặt lịch khám gấp tại cơ sở Tai Mũi Họng có nội soi và xét nghiệm nấm.\n- Có thể cần chụp CT hoặc MRI để đánh giá mức độ lan rộng.\n@emergency:\n- Cấp cứu ngay nếu sưng quanh mắt, đau mặt dữ dội, sốt cao hoặc nhìn mờ.\n- Gọi 115 khi xuất hiện dấu hiệu thần kinh như lơ mơ, yếu tay chân hoặc co giật.\n@notes:\n- Điều trị thường phối hợp phẫu thuật nội soi và thuốc kháng nấm; không tự điều trị.\n- Duy trì kiểm soát miễn dịch và bệnh nền để giảm nguy cơ tái phát.",
+      "recommendation": "@summary:\n- Nghi ngờ viêm xoang do nấm với mức độ Severe.\n- Tình trạng này cần đánh giá chuyên khoa sớm, đặc biệt ở người suy giảm miễn dịch.\n@drivers:\n- Viêm xoang mạn kèm suy giảm miễn dịch hoặc polyp kéo dài.\n- Dịch mũi đặc, hôi hoặc đau mặt dai dẳng.\n@home_care:\n- Giữ vệ sinh mũi họng, rửa mũi đúng cách bằng nước muối sạch.\n- Tránh ngoáy mũi, hạn chế môi trường ẩm mốc, kiểm soát đường huyết tốt.\n- Chuẩn bị hồ sơ các thuốc đang dùng và bệnh nền để cung cấp cho bác sĩ.\n@medical_visit:\n- Đặt lịch khám gấp tại cơ sở Tai Mũi Họng có nội soi và xét nghiệm nấm.\n- Có thể cần chụp CT hoặc MRI để đánh giá mức độ lan rộng.\n@follow_up:\n- Tuân thủ lịch hẹn tái khám sát sao (thường mỗi 1-2 tuần) để theo dõi đáp ứng điều trị.\n- Báo bác sĩ ngay nếu xuất hiện triệu chứng thần kinh, thị giác hoặc đau mặt tăng nhanh.\n@emergency:\n- Cấp cứu ngay nếu sưng quanh mắt, đau mặt dữ dội, sốt cao hoặc nhìn mờ.\n- Gọi 115 khi xuất hiện dấu hiệu thần kinh như lơ mơ, yếu tay chân hoặc co giật.\n@notes:\n- Điều trị thường phối hợp phẫu thuật nội soi và thuốc kháng nấm; không tự điều trị.\n- Duy trì kiểm soát miễn dịch và bệnh nền để giảm nguy cơ tái phát.",
       "priority": "High"
     },
     {
+      "condition": "viem_xoang_tai_phat",
+      "recommendation": "@summary:\n- Viêm xoang cấp tái phát mức độ Moderate với ≥ 4 đợt/năm.\n- Cần đánh giá yếu tố nguy cơ nền và chiến lược phòng ngừa lâu dài.\n@drivers:\n- Lịch sử tái phát nhiều đợt viêm xoang cấp kèm triệu chứng điển hình hiện tại.\n- Đủ bằng chứng về thời gian và tính chất dịch mũi của đợt cấp này.\n@home_care:\n- Tuân thủ phác đồ điều trị của bác sĩ, hoàn thành đủ liệu trình kháng sinh nếu được kê.\n- Rửa mũi bằng nước muối hằng ngày, giữ ấm và tránh khói bụi, dị nguyên.\n- Chủ động kiểm soát dị ứng nền (nếu có) theo hướng dẫn.\n@medical_visit:\n- Hẹn khám chuyên khoa Tai Mũi Họng để đánh giá cấu trúc mũi xoang và các yếu tố tái phát.\n- Trao đổi về biện pháp dự phòng: tiêm vaccine cúm, điều trị dị ứng, cải thiện môi trường sống.\n@follow_up:\n- Tái khám sau mỗi đợt điều trị (7-14 ngày) và định kỳ mỗi 3 tháng để phòng tái phát.\n- Ghi lại số lần tái phát, thuốc đã dùng và tác nhân khởi phát để cung cấp cho bác sĩ.\n@emergency:\n- Cấp cứu nếu đợt cấp gây sưng quanh mắt, nhìn mờ, đau đầu dữ dội hoặc sốt cao kéo dài.\n- Liên hệ 115 khi xuất hiện dấu hiệu thần kinh bất thường.\n@notes:\n- Cân nhắc nội soi, chụp CT hoặc xét nghiệm dị ứng để tìm nguyên nhân tái phát.\n- Duy trì lối sống lành mạnh, vệ sinh tay mũi và tránh tác nhân kích phát trong mùa lạnh.",
+      "priority": "Medium"
+    },
+    {
       "condition": "nguy_co_bien_chung",
-      "recommendation": "@summary:\n- Phát hiện dấu hiệu nguy cơ biến chứng nghiêm trọng; cần ưu tiên an toàn tối đa.\n- Hãy xử trí y tế khẩn cấp ngay.\n@drivers:\n- Kết hợp red flag: sốt rất cao, đau đầu dữ dội, sưng quanh mắt, nhìn mờ hoặc cứng gáy.\n@home_care:\n- Không áp dụng điều trị tại nhà ở giai đoạn này.\n- Giữ ấm cơ thể và chuẩn bị giấy tờ y tế trong khi chờ di chuyển.\n@medical_visit:\n- Đến khoa cấp cứu bệnh viện gần nhất ngay lập tức.\n- Nhờ người thân hỗ trợ, không tự lái xe, mang danh sách thuốc và bệnh nền.\n@emergency:\n- Đây đã là tình huống cấp cứu; gọi 115 nếu khó di chuyển.\n- Theo dõi đường thở và tri giác trong khi chờ nhân viên y tế.\n@notes:\n- Biến chứng có thể gồm viêm mô tế bào hốc mắt, viêm màng não hoặc huyết khối xoang hang.\n- Thông báo rõ thời gian xuất hiện triệu chứng và thuốc đã dùng cho bác sĩ.",
+      "recommendation": "@summary:\n- Phát hiện dấu hiệu nguy cơ biến chứng nghiêm trọng; cần ưu tiên an toàn tối đa.\n- Hãy xử trí y tế khẩn cấp ngay.\n@drivers:\n- Kết hợp red flag: sốt rất cao, đau đầu dữ dội, sưng quanh mắt, nhìn mờ hoặc cứng gáy.\n@home_care:\n- Không áp dụng điều trị tại nhà ở giai đoạn này.\n- Giữ ấm cơ thể và chuẩn bị giấy tờ y tế trong khi chờ di chuyển.\n@medical_visit:\n- Đến khoa cấp cứu bệnh viện gần nhất ngay lập tức.\n- Nhờ người thân hỗ trợ, không tự lái xe, mang danh sách thuốc và bệnh nền.\n@follow_up:\n- Sau khi được xử trí cấp cứu, cần tái khám chuyên khoa Tai Mũi Họng theo lịch hẹn để theo dõi biến chứng.\n- Báo bác sĩ ngay nếu triệu chứng tái phát hoặc xuất hiện dấu hiệu thần kinh mới.\n@emergency:\n- Đây đã là tình huống cấp cứu; gọi 115 nếu khó di chuyển.\n- Theo dõi đường thở và tri giác trong khi chờ nhân viên y tế.\n@notes:\n- Biến chứng có thể gồm viêm mô tế bào hốc mắt, viêm màng não hoặc huyết khối xoang hang.\n- Thông báo rõ thời gian xuất hiện triệu chứng và thuốc đã dùng cho bác sĩ.",
       "priority": "Critical"
     },
     {
       "condition": "khong_phai_viem_xoang",
-      "recommendation": "@summary:\n- Chưa đủ bằng chứng kết luận viêm xoang dựa trên dữ liệu hiện tại.\n- Triệu chứng có thể phù hợp cảm lạnh hoặc viêm mũi dị ứng nhẹ.\n@drivers:\n- Thiếu các dấu hiệu chủ chốt như đau mặt kéo dài, dịch mũi đặc hoặc thời gian > 10 ngày.\n@home_care:\n- Nghỉ ngơi, uống nước ấm, tránh khói bụi và giữ ấm mũi họng.\n- Rửa mũi bằng nước muối nếu nghẹt hoặc chảy mũi; giữ vệ sinh tay thường xuyên.\n@medical_visit:\n- Khám bác sĩ nếu triệu chứng kéo dài hơn 10 ngày hoặc nặng dần.\n- Tái khám sớm nếu bạn có bệnh nền hô hấp hoặc miễn dịch yếu.\n@emergency:\n- Cấp cứu khi xuất hiện sưng quanh mắt, nhìn mờ, đau đầu dữ dội, cứng gáy hoặc sốt cao.\n@notes:\n- \"Chưa đủ bằng chứng\" không đồng nghĩa chắc chắn khỏe mạnh; tiếp tục theo dõi triệu chứng.\n- Ghi lại thay đổi triệu chứng để cung cấp cho bác sĩ khi cần.",
+      "recommendation": "@summary:\n- Chưa đủ bằng chứng kết luận viêm xoang dựa trên dữ liệu hiện tại.\n- Triệu chứng có thể phù hợp cảm lạnh hoặc viêm mũi dị ứng nhẹ.\n@drivers:\n- Thiếu các dấu hiệu chủ chốt như đau mặt kéo dài, dịch mũi đặc hoặc thời gian > 10 ngày.\n@home_care:\n- Nghỉ ngơi, uống nước ấm, tránh khói bụi và giữ ấm mũi họng.\n- Rửa mũi bằng nước muối nếu nghẹt hoặc chảy mũi; giữ vệ sinh tay thường xuyên.\n@medical_visit:\n- Khám bác sĩ nếu triệu chứng kéo dài hơn 10 ngày hoặc nặng dần.\n- Tái khám sớm nếu bạn có bệnh nền hô hấp hoặc miễn dịch yếu.\n@follow_up:\n- Theo dõi triệu chứng trong 5-7 ngày; nếu xuất hiện đau mặt, sốt cao hoặc dịch mũi đặc, cần tái khám.\n- Chủ động đặt lịch khám lại nếu triệu chứng tái phát nhiều lần trong vài tháng.\n@emergency:\n- Cấp cứu khi xuất hiện sưng quanh mắt, nhìn mờ, đau đầu dữ dội, cứng gáy hoặc sốt cao.\n@notes:\n- \"Chưa đủ bằng chứng\" không đồng nghĩa chắc chắn khỏe mạnh; tiếp tục theo dõi triệu chứng.\n- Ghi lại thay đổi triệu chứng để cung cấp cho bác sĩ khi cần.",
       "priority": "Info"
     }
   ]

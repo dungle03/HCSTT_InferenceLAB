@@ -69,6 +69,7 @@ class MedicalKnowledgeBase:
                 "premises": list(rule.premises),
                 "conclusion": rule.conclusion,
                 "notes": rule_data.get("notes"),
+                "confidence": rule_data.get("confidence"),
             }
 
         return kb
