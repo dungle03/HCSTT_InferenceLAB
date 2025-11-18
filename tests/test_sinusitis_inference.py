@@ -87,7 +87,6 @@ SCENARIOS = [
             },
             "expected_severity": "Mild",
         },
-        id="acute-virus",
     ),
     pytest.param(
         {
@@ -111,7 +110,6 @@ SCENARIOS = [
             },
             "expected_severity": "Moderate",
         },
-        id="acute-bacteria",
     ),
     pytest.param(
         {
@@ -134,7 +132,6 @@ SCENARIOS = [
             },
             "expected_severity": "Moderate",
         },
-        id="recurrent",
     ),
     pytest.param(
         {
@@ -149,7 +146,6 @@ SCENARIOS = [
             "expected_facts": {"viem_xoang_man_tinh", "viem_xoang_man_tinh_co_polyp"},
             "expected_severity": "Moderate",
         },
-        id="chronic",
     ),
     pytest.param(
         {
@@ -165,7 +161,6 @@ SCENARIOS = [
             "expected_facts": {"viem_xoang_man_tinh", "viem_xoang_do_nam"},
             "expected_severity": "Severe",
         },
-        id="fungal",
     ),
     pytest.param(
         {
@@ -189,7 +184,6 @@ SCENARIOS = [
             },
             "expected_severity": "Critical",
         },
-        id="complication",
     ),
 ]
 
@@ -227,7 +221,7 @@ def test_forward_inference_matches_medical_expectation(
         "viem_xoang_cap_do_virus",
         "viem_xoang_cap_do_vi_khuan",
         "viem_xoang_cap",
-    "viem_xoang_tai_phat",
+        "viem_xoang_tai_phat",
         "viem_xoang_man_tinh",
         "viem_xoang_do_nam",
         "nguy_co_bien_chung",
