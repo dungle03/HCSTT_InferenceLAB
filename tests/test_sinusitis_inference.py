@@ -247,3 +247,7 @@ def test_recommendations_remain_structured(
     ]
     for marker in required_markers:
         assert marker in recommendation, f"Marker {marker} absent for {disease}"
+
+
+if __name__ == "__main__":
+    sys.exit(pytest.main(["-v", __file__]))
